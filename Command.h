@@ -8,6 +8,7 @@ class Command
 public:
     virtual void execute() = 0;
 
-private:
+protected:
     string description;
+    DefaultIO *IO;
 };

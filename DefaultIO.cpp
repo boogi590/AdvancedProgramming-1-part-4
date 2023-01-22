@@ -2,6 +2,7 @@
 
 string DefaultIO::read()
 {
+    return "";
 }
 
 void DefaultIO::write(string input)
