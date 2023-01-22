@@ -6,6 +6,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <fstream>
+#include <limits>
 
 using namespace std;
 
@@ -60,10 +61,18 @@ int main(int argc, char *argv[])
         recv(sock, buffer, 189, 0);
         cout << buffer;
         memset(buffer, 0, sizeof(buffer));
-        cout << "sent menu" << endl;
-
         getline(cin, input);
-        cout << "got input" << endl;
+        while (input.empty() || !input.compare(""))
+        {
+
+            getline(cin, input);
+        }
+
+        while (input != "1" && input != "2" && input != "3" && input != "4" && input != "5" && input != "8")
+        {
+            cout << "Invalid input, please enter a valid input: ";
+            getline(cin, input);
+        }
 
         try
         {
@@ -78,11 +87,7 @@ int main(int argc, char *argv[])
         }
 
         data_len = input.length();
-        cout << "ready to send choise" << endl;
-
         int sent_bytes = send(sock, input.c_str(), data_len, 0);
-
-        cout << "ent choise" << endl;
 
         if (sent_bytes < 0)
         {
@@ -154,8 +159,16 @@ int main(int argc, char *argv[])
             }
             fileTrain.close();
             memset(buffer, 0, sizeof(buffer));
-            recv(sock, buffer, sizeof(buffer), 0);
+
+            // recive Upload complete.
+            recv(sock, buffer, sizeof("Upload complete.\n"), 0);
             cout << buffer;
+        }
+
+        if (data_len == 1 && input == "8")
+        {
+
+            break;
         }
     }
     close(sock);

@@ -78,9 +78,7 @@ int main(int argc, char *argv[])
             string classification = "invalid input";
 
             int expected_data_len = sizeof(buffer);
-            cout << "ready to recive choise" << endl;
             read_bytes = recv(client_sock, buffer, expected_data_len, 0);
-            cout << "ready to recived choise" << endl;
 
             if (read_bytes == 0)
             {
@@ -101,6 +99,12 @@ int main(int argc, char *argv[])
                     SocketIO socket(client_sock);
                     UploadCommand command(socket);
                     command.execute();
+                }
+
+                if (strlen(buffer) == 1 && buffer[0] == '8')
+                {
+
+                    break;
                 }
             }
         }

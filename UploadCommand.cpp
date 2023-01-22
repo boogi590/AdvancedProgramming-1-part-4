@@ -36,7 +36,7 @@ void UploadCommand::execute()
 
     this->dataBase = DataBase::createDataBaseFromFIle(fileTrain);
 
-    // cout << fileTrain << endl;
+    cout << fileTrain << endl;
 
     string upload = "Upload complete.\nPlease upload your local test CSV file.";
     send(socket.getSock(), upload.c_str(), upload.length(), 0);
@@ -56,7 +56,7 @@ void UploadCommand::execute()
         fileTest += string(buffer, sizeof(buffer));
     }
     this->test = fileTest;
-    //   cout << fileTest;
+    cout << fileTest;
 
     string uploadTest = "Upload complete.\n";
     send(socket.getSock(), uploadTest.c_str(), uploadTest.length(), 0);
