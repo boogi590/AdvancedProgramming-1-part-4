@@ -21,23 +21,18 @@ using namespace std;
 int main(int argc, char *argv[])
 {
     string classification;
-    if (argc != 3)
+    char menu[] = "Welcome to the KNN Classifier Server. Please choose an option:\n1. upload an unclassified csv data file\n2. algorithm settings\n3. classify data\n4. display result\n5. download results\n8. exit\n";
+
+    if (argc != 2)
     {
-        cout << "wrong number of arguments. there should be 3 arguments" << endl;
+        cout << "wrong number of arguments. there should be 2 arguments" << endl;
         return 0;
     }
-    // create the data base
-    multimap<vector<double>, string> dataBase;
-    dataBase = DataBase::createDataBaseFromFIle(argv[1]); // argv[1] should be file name of the data base.
-    if (dataBase.empty())
-    {
-        cout << "an error has occurred in the data base" << endl;
-        return 0;
-    }
+
     int temp = 0;
     try
     {
-        temp = stoi(argv[2]); // argv[2] should be the port to listen to.
+        temp = stoi(argv[1]); // argv[2] should be the port to listen to.
     }
     catch (...)
     {
@@ -75,14 +70,18 @@ int main(int argc, char *argv[])
         }
         while (true)
         {
-
             char buffer[4096];
             memset(buffer, 0, sizeof(buffer));
+            int read_bytes = send(client_sock, menu, sizeof(menu), 0);
+
             bool invalidFlag = false;
             string classification = "invalid input";
 
             int expected_data_len = sizeof(buffer);
-            int read_bytes = recv(client_sock, buffer, expected_data_len, 0);
+            cout << "ready to recive choise" << endl;
+            read_bytes = recv(client_sock, buffer, expected_data_len, 0);
+            cout << "ready to recived choise" << endl;
+
             if (read_bytes == 0)
             {
                 break;

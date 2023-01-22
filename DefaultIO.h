@@ -1,4 +1,5 @@
-
+#ifndef _DEFAULTIO_H
+#define _DEFAULTIO_H
 #include <string>
 
 using namespace std;
@@ -9,3 +10,4 @@ public:
     virtual string read() = 0;
     virtual void write(string input) = 0;
 };
+#endif

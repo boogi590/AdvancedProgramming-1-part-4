@@ -9,13 +9,12 @@
 #include <iostream>
 UploadCommand::UploadCommand(SocketIO socket)
 {
-
+    this->description = "Please upload your local train CSV file.";
     this->socket = socket;
 }
 
 void UploadCommand::execute()
 {
-    string description = "Please upload your local train CSV file.";
     send(socket.getSock(), description.c_str(), description.length(), 0);
     int fileSizeTrain = 0;
     int bytes_received_total = 0;
@@ -37,13 +36,10 @@ void UploadCommand::execute()
 
     this->dataBase = DataBase::createDataBaseFromFIle(fileTrain);
 
-    cout << fileTrain << endl;
+    // cout << fileTrain << endl;
 
-    string upload = "Upload complete.\n";
+    string upload = "Upload complete.\nPlease upload your local test CSV file.";
     send(socket.getSock(), upload.c_str(), upload.length(), 0);
-
-    string testString = "Please upload your local test CSV file.\n";
-    send(socket.getSock(), testString.c_str(), testString.length(), 0);
 
     int fileSizeTest = 0;
     bytes_received_total = 0;
@@ -60,5 +56,8 @@ void UploadCommand::execute()
         fileTest += string(buffer, sizeof(buffer));
     }
     this->test = fileTest;
-    cout << fileTest << endl;
+    //   cout << fileTest;
+
+    string uploadTest = "Upload complete.\n";
+    send(socket.getSock(), uploadTest.c_str(), uploadTest.length(), 0);
 }

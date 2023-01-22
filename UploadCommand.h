@@ -2,6 +2,13 @@
 #include "SocketIO.h"
 #include <map>
 #include <vector>
+#include "DataBase.h"
+#include "string.h"
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <stdlib.h>
+#include <iostream>
 
 class UploadCommand : public Command
 {
