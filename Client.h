@@ -5,4 +5,5 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 #include <string.h>
+#include <sstream>
 using namespace std;

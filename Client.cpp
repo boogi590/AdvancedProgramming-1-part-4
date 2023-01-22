@@ -5,6 +5,8 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 #include <string.h>
+#include <fstream>
+
 using namespace std;
 
 int main(int argc, char *argv[])
@@ -53,6 +55,8 @@ int main(int argc, char *argv[])
     string input;
     while (true)
     {
+        char buffer[4096];
+        memset(buffer, 0, sizeof(buffer));
         getline(cin, input);
         try
         {
@@ -65,27 +69,85 @@ int main(int argc, char *argv[])
         catch (...)
         {
         }
+
         data_len = input.length();
+
         int sent_bytes = send(sock, input.c_str(), data_len, 0);
         if (sent_bytes < 0)
         {
             perror("error in sending");
         }
-        char buffer[4096];
-        int expected_data_len = sizeof(buffer);
-        int read_bytes = recv(sock, buffer, expected_data_len, 0);
-        if (read_bytes == 0)
+
+        if (data_len == 1 && input == "1")
         {
-            perror("connection is closed");
-        }
-        else if (read_bytes < 0)
-        {
-            perror("error in receving from server");
-        }
-        else
-        {
-            cout << buffer << "\n";
-            memset(buffer, 0, read_bytes);
+            recv(sock, buffer, sizeof(buffer), 0);
+            cout << buffer << endl;
+            string fileName;
+            cin >> fileName;
+
+            ifstream file(fileName, ios::binary);
+            if (!file)
+            {
+                cerr << "Error opening file" << endl;
+                exit(1);
+            }
+
+            // Get the file size
+            file.seekg(0, file.end);
+            int fileSize = file.tellg();
+            file.seekg(0, file.beg);
+
+            // Send the file size
+            send(sock, (char *)&fileSize, sizeof(fileSize), 0);
+
+            // Send the file
+            char buffer[4096];
+            while (file)
+            {
+                file.read(buffer, sizeof(buffer));
+                int bytes_read = file.gcount();
+                send(sock, buffer, bytes_read, 0);
+            }
+            file.close();
+            memset(buffer, 0, sizeof(buffer));
+            recv(sock, buffer, sizeof(buffer), 0);
+            cout << buffer;
+
+            /////
+
+            recv(sock, buffer, sizeof(buffer), 0);
+            cout << buffer;
+            string fileNameTrain;
+            cin >> fileNameTrain;
+
+            ifstream fileTrain(fileNameTrain, ios::binary);
+            if (!fileTrain)
+            {
+                cerr << "Error opening file" << endl;
+                exit(1);
+            }
+
+            // Get the file size
+            fileTrain.seekg(0, fileTrain.end);
+            int fileSizeTrain = fileTrain.tellg();
+            fileTrain.seekg(0, fileTrain.beg);
+
+            // Send the file size
+            send(sock, (char *)&fileSizeTrain, sizeof(fileSizeTrain), 0);
+
+            // Send the file
+            memset(buffer, 0, sizeof(buffer));
+
+            while (fileTrain)
+            {
+                fileTrain.read(buffer, sizeof(buffer));
+                int bytes_read = file.gcount();
+                send(sock, buffer, bytes_read, 0);
+            }
+            fileTrain.close();
+            memset(buffer, 0, sizeof(buffer));
+            recv(sock, buffer, sizeof(buffer), 0);
+            cout << buffer << endl;
         }
     }
     close(sock);
