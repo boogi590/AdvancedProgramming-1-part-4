@@ -11,6 +11,7 @@
 #include "InputValidation.h"
 #include "DataBase.h"
 #include "KNN.h"
+#include "UploadCommand.h"
 
 using namespace std;
 /*
@@ -74,10 +75,12 @@ int main(int argc, char *argv[])
         }
         while (true)
         {
+
             char buffer[4096];
             memset(buffer, 0, sizeof(buffer));
             bool invalidFlag = false;
-            string classification;
+            string classification = "invalid input";
+
             int expected_data_len = sizeof(buffer);
             int read_bytes = recv(client_sock, buffer, expected_data_len, 0);
             if (read_bytes == 0)
@@ -91,69 +94,15 @@ int main(int argc, char *argv[])
             }
             else
             {
-                istringstream iss(buffer); // creating a istringstream to extract from client output the vector, string that represents distance function and K for KNN algorithem.
-                vector<double> vec;
-                string distanceFunction = " ";
-                int k = 0;
 
-                // Extract the double vector
-                double x;
-                while (iss >> x)
-                {
-                    vec.push_back(x);
-                }
-                if (iss.fail())
-                {
-                    // reset the state of the stringstream
-                    iss.clear();
-                }
-
-                // Extract the string
-                iss >> distanceFunction;
-
-                // Extract the integer
-                iss >> k;
-
-                if (k <= 0)
-                {
-                    invalidFlag = true;
-                    classification = "invalid input";
-                }
-                // CHECK: If K is greater than the number of vectors in the database we define him to be the size of the database.
-                if (k > dataBase.size())
-                {
-                    k = dataBase.size();
-                }
-
-                // CHECK: if the input vector is not the same length as the vectors in the database.
-                if (!InputValidation::isVectorsLengthEquals(vec, dataBase.begin()->first))
-                {
-                    invalidFlag = true;
-                    classification = "invalid input";
-                }
-
-                // CHECK: if the user entered a non-existent distance function - not one of the existing options.
-                vector<double> v1 = {1, 2};
-                vector<double> v2 = {2, 3};
-
-                double tempDistance = Distance::distanceAcorddingTo(v1, v2, distanceFunction);
-                if (tempDistance == -1)
-                {
-                    invalidFlag = true;
-                    classification = "invalid input";
-                }
-
-                if (!invalidFlag)
+                if (strlen(buffer) == 1 && buffer[0] == '1')
                 {
 
-                    KNN calculateKNN(k, dataBase, distanceFunction);
-                    classification = calculateKNN.KNN::mostCommonFromK(vec);
+                    memset(buffer, 0, sizeof(buffer));
+                    SocketIO socket(client_sock);
+                    UploadCommand command(socket);
+                    command.execute();
                 }
-            }
-            int sent_bytes = send(client_sock, classification.c_str(), classification.length(), 0);
-            if (sent_bytes < 0)
-            {
-                perror("error sending to client");
             }
         }
         close(client_sock);
