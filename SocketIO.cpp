@@ -1,3 +1,4 @@
+
 #include "SocketIO.h"
 
 #include <iostream>
@@ -12,6 +13,7 @@ SocketIO::SocketIO()
 
 string SocketIO::read()
 {
+    return "";
 }
 void SocketIO::write(string)
 {

@@ -1,3 +1,5 @@
+#ifndef _COMMAND_H
+#define _COMMAND_H
 
 #include <string>
 #include "DefaultIO.h"
@@ -13,3 +15,5 @@ protected:
     string description;
     DefaultIO *IO;
 };
+
+#endif

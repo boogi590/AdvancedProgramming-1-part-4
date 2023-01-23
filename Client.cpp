@@ -58,10 +58,12 @@ int main(int argc, char *argv[])
     {
         char buffer[4096];
         memset(buffer, 0, sizeof(buffer));
+
         recv(sock, buffer, 189, 0);
         cout << buffer;
         memset(buffer, 0, sizeof(buffer));
         getline(cin, input);
+
         while (input.empty() || !input.compare(""))
         {
 
@@ -163,6 +165,20 @@ int main(int argc, char *argv[])
             // recive Upload complete.
             recv(sock, buffer, sizeof("Upload complete.\n"), 0);
             cout << buffer;
+        }
+
+        if (data_len == 1 && input == "2")
+        {
+            memset(buffer, 0, sizeof(buffer));
+
+            // get bytes in the size of the description
+            recv(sock, buffer, 65, 0);
+            cout << buffer;
+            memset(buffer, 0, sizeof(buffer));
+
+            string newParms;
+            cin >> newParms;
+            send(sock, newParms.c_str(), sizeof(newParms), 0);
         }
 
         if (data_len == 1 && input == "8")

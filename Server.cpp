@@ -12,6 +12,7 @@
 #include "DataBase.h"
 #include "KNN.h"
 #include "UploadCommand.h"
+#include "SettingsCommand.h"
 
 using namespace std;
 /*
@@ -70,15 +71,23 @@ int main(int argc, char *argv[])
         }
         while (true)
         {
+            SocketIO socket(client_sock);
+
+            multimap<vector<double>, string> dataBase;
+            vector<vector<double>> test;
+            string distanceMatric;
+            int k;
+
             char buffer[4096];
             memset(buffer, 0, sizeof(buffer));
             int read_bytes = send(client_sock, menu, sizeof(menu), 0);
 
             bool invalidFlag = false;
             string classification = "invalid input";
+            memset(buffer, 0, sizeof(buffer));
 
             int expected_data_len = sizeof(buffer);
-            read_bytes = recv(client_sock, buffer, expected_data_len, 0);
+            read_bytes = recv(client_sock, buffer, sizeof(buffer), 0);
 
             if (read_bytes == 0)
             {
@@ -96,9 +105,16 @@ int main(int argc, char *argv[])
                 {
 
                     memset(buffer, 0, sizeof(buffer));
-                    SocketIO socket(client_sock);
-                    UploadCommand command(socket);
+                    UploadCommand command(socket, dataBase, test);
                     command.execute();
+                }
+
+                if (strlen(buffer) == 1 && buffer[0] == '2')
+                {
+
+                    memset(buffer, 0, sizeof(buffer));
+                    SettingsCommand settingCommand(socket, dataBase, k, distanceMatric);
+                    settingCommand.execute();
                 }
 
                 if (strlen(buffer) == 1 && buffer[0] == '8')
