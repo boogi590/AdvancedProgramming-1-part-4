@@ -13,6 +13,7 @@
 #include "KNN.h"
 #include "UploadCommand.h"
 #include "SettingsCommand.h"
+#include "FlowControl.h"
 
 using namespace std;
 /*
@@ -77,7 +78,8 @@ int main(int argc, char *argv[])
             vector<vector<double>> test;
             string distanceMatric;
             int k;
-
+            FlowControl flowControl;
+            
             char buffer[4096];
             memset(buffer, 0, sizeof(buffer));
             int read_bytes = send(client_sock, menu, sizeof(menu), 0);
