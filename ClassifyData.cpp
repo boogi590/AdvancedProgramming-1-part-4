@@ -10,12 +10,13 @@ ClassifyData::ClassifyData(const multimap<vector<double>, string> &database,
 
 void ClassifyData::execute()
 {
-    int line =1;
+    int line = 1;
     map<int, string> classify_data;
     KNN running_knn(k, database, distance_metric);
-    for (auto testVec : testCSV) {
+    for (auto testVec : testCSV)
+    {
         classify_data.insert({line, running_knn.mostCommonFromK(testVec)});
-        line ++;
+        line++;
     }
-    //IO.write("complete data classifying");
+    // IO.write("complete data classifying");
 }
