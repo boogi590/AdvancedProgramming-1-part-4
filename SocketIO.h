@@ -1,3 +1,5 @@
+#ifndef _SOCKETIO_H
+#define _SOCKETIO_H
 #include "DefaultIO.h"
 
 class SocketIO : public DefaultIO
@@ -13,3 +15,4 @@ public:
 private:
     int socketNum;
 };
+#endif

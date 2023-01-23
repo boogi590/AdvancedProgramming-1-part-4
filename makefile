@@ -1,9 +1,9 @@
 all: server.out client.out
 
-server.out: Server.o Distance.o InputValidation.o DataBase.o KNN.o DefaultIO.o SocketIO.o UploadCommand.o Command.o
+server.out: Server.o Distance.o InputValidation.o DataBase.o KNN.o DefaultIO.o SocketIO.o UploadCommand.o Command.o SettingsCommand.o DisplayResults.o ClassifyData.o
 	g++ -o $@ $^ -std=c++11
 
-client.out: Client.o Distance.o InputValidation.o DataBase.o KNN.o DefaultIO.o SocketIO.o UploadCommand.o Command.o
+client.out: Client.o Distance.o InputValidation.o DataBase.o KNN.o DefaultIO.o SocketIO.o UploadCommand.o Command.o SettingsCommand.o DisplayResults.o ClassifyData.o
 	g++ -o $@ $^ -std=c++11
 
 %.o: %.cpp
