@@ -59,9 +59,12 @@ int main(int argc, char *argv[])
         char buffer[4096];
         memset(buffer, 0, sizeof(buffer));
 
-        recv(sock, buffer, 189, 0);
-        cout << buffer;
+        recv(sock, buffer, 187, 0);
+
+        cout << buffer << endl;
+
         memset(buffer, 0, sizeof(buffer));
+
         getline(cin, input);
 
         while (input.empty() || !input.compare(""))
@@ -169,6 +172,8 @@ int main(int argc, char *argv[])
 
         if (data_len == 1 && input == "2")
         {
+            char buffer[4096];
+
             memset(buffer, 0, sizeof(buffer));
 
             // get bytes in the size of the description
@@ -177,16 +182,19 @@ int main(int argc, char *argv[])
             memset(buffer, 0, sizeof(buffer));
 
             string newParms;
-            cin >> newParms;
-            send(sock, newParms.c_str(), sizeof(newParms), 0);
+            getline(cin, newParms);
+
+            send(sock, newParms.c_str(), newParms.length(), 0);
 
             memset(buffer, 0, sizeof(buffer));
 
-            recv(sock, buffer, sizeof(buffer), 0);
-            if (buffer != "changed")
+            recv(sock, buffer, 45, 0);
+            string answer = string(buffer, 7);
+            if (answer != "changed")
             {
                 cout << buffer;
             }
+            memset(buffer, 0, sizeof(buffer));
         }
 
         if (data_len == 1 && input == "8")

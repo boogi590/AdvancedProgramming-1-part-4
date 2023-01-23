@@ -58,10 +58,10 @@ void SettingsCommand::execute()
         this->distanceMatric = distanceFunc;
         this->k = tempK;
         string changed = "changed";
-        send(socket.getSock(), changed.c_str(), changed.size(), 0);
+        send(socket.getSock(), changed.c_str(), changed.length(), 0);
     }
     else
     {
-        send(socket.getSock(), error.c_str(), error.size(), 0);
+        send(socket.getSock(), error.c_str(), error.length(), 0);
     }
 }

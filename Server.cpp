@@ -22,7 +22,7 @@ using namespace std;
 int main(int argc, char *argv[])
 {
     string classification;
-    char menu[] = "Welcome to the KNN Classifier Server. Please choose an option:\n1. upload an unclassified csv data file\n2. algorithm settings\n3. classify data\n4. display result\n5. download results\n8. exit\n";
+    string menu = "Welcome to the KNN Classifier Server. Please choose an option:\n1. upload an unclassified csv data file\n2. algorithm settings\n3. classify data\n4. display result\n5. download results\n8. exit";
 
     if (argc != 2)
     {
@@ -69,18 +69,18 @@ int main(int argc, char *argv[])
         {
             perror("error accepting client");
         }
+        SocketIO socket(client_sock);
+
+        multimap<vector<double>, string> dataBase;
+        vector<vector<double>> test;
+        string distanceMatric = "AUC";
+        int k = 5;
         while (true)
         {
-            SocketIO socket(client_sock);
-
-            multimap<vector<double>, string> dataBase;
-            vector<vector<double>> test;
-            string distanceMatric;
-            int k;
 
             char buffer[4096];
             memset(buffer, 0, sizeof(buffer));
-            int read_bytes = send(client_sock, menu, sizeof(menu), 0);
+            int read_bytes = send(client_sock, menu.c_str(), menu.length(), 0);
 
             bool invalidFlag = false;
             string classification = "invalid input";
