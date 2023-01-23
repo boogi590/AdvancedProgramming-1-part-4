@@ -1,6 +1,9 @@
+#ifndef _COMMAND_H
+#define _COMMAND_H
 
 #include <string>
 #include "DefaultIO.h"
+
 using namespace std;
 
 class Command
@@ -12,3 +15,5 @@ protected:
     string description;
     DefaultIO *IO;
 };
+
+#endif

@@ -122,6 +122,52 @@ multimap<vector<double>, string> DataBase::createDataBaseFromString(string nameO
     }
 }
 
+vector<vector<double>> DataBase::createTestVectors(string testFile)
+{
+    // Open the file for reading
+    stringstream file(testFile);
+
+    vector<vector<double>> dataBase;
+    string line;
+
+    while (getline(file, line))
+    {
+        vector<double> values;
+        string type;
+        // Use a stringstream to parse the values from the line
+        stringstream lineStream(line);
+
+        // Use a temporary variable to hold each value as it is read
+        string value;
+        bool inputFlag = true;
+        // Iterate over each value in the line
+        while (getline(lineStream, value, ','))
+        {
+            // If this is the last value in the line, store it in the string variable
+
+            try
+            {
+                values.push_back(stod(value));
+            }
+            catch (const invalid_argument &)
+            {
+                inputFlag = false;
+                continue;
+            }
+            catch (const out_of_range &)
+            {
+                inputFlag = false;
+                continue;
+            }
+        }
+        if (inputFlag)
+        {
+            dataBase.push_back(values);
+        }
+    }
+    return dataBase;
+}
+
 bool DataBase::dataBaseValidation(multimap<vector<double>, string> &dataBase)
 {
     int size = dataBase.begin()->first.size();

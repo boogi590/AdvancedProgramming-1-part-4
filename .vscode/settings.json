@@ -6,6 +6,10 @@
         "fstream": "cpp",
         "*.tcc": "cpp",
         "string": "cpp",
-        "string_view": "cpp"
+        "string_view": "cpp",
+        "limits": "cpp",
+        "sstream": "cpp",
+        "stdexcept": "cpp",
+        "map": "cpp"
     }
 }

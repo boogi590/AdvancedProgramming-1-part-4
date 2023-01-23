@@ -1,21 +1,15 @@
 #include "UploadCommand.h"
-#include "DataBase.h"
-#include "string.h"
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <stdlib.h>
 
-#include <iostream>
-UploadCommand::UploadCommand(SocketIO socket)
+UploadCommand::UploadCommand(SocketIO socket, multimap<vector<double>, string> &database,
+                             vector<vector<double>> &test) : socket(socket),
+                                                             database(database),
+                                                             test(test)
+
 {
-
-    this->socket = socket;
 }
 
 void UploadCommand::execute()
 {
-    string description = "Please upload your local train CSV file.";
     send(socket.getSock(), description.c_str(), description.length(), 0);
     int fileSizeTrain = 0;
     int bytes_received_total = 0;
@@ -35,15 +29,12 @@ void UploadCommand::execute()
         fileTrain += string(buffer, sizeof(buffer));
     }
 
-    this->dataBase = DataBase::createDataBaseFromFIle(fileTrain);
+    this->database = DataBase::createDataBaseFromString(fileTrain);
 
-    cout << fileTrain << endl;
+    // cout << fileTrain << endl;
 
-    string upload = "Upload complete.\n";
+    string upload = "Upload complete.\nPlease upload your local test CSV file.";
     send(socket.getSock(), upload.c_str(), upload.length(), 0);
-
-    string testString = "Please upload your local test CSV file.\n";
-    send(socket.getSock(), testString.c_str(), testString.length(), 0);
 
     int fileSizeTest = 0;
     bytes_received_total = 0;
@@ -59,6 +50,9 @@ void UploadCommand::execute()
         bytes_received_total += bytes_received;
         fileTest += string(buffer, sizeof(buffer));
     }
-    this->test = fileTest;
-    cout << fileTest << endl;
+    this->test = DataBase::createTestVectors(fileTest);
+    //  cout << fileTest;
+
+    string uploadTest = "Upload complete.\n";
+    send(socket.getSock(), uploadTest.c_str(), uploadTest.length(), 0);
 }

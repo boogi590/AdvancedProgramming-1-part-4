@@ -6,6 +6,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <fstream>
+#include <limits>
 
 using namespace std;
 
@@ -57,7 +58,24 @@ int main(int argc, char *argv[])
     {
         char buffer[4096];
         memset(buffer, 0, sizeof(buffer));
+
+        recv(sock, buffer, 189, 0);
+        cout << buffer;
+        memset(buffer, 0, sizeof(buffer));
         getline(cin, input);
+
+        while (input.empty() || !input.compare(""))
+        {
+
+            getline(cin, input);
+        }
+
+        while (input != "1" && input != "2" && input != "3" && input != "4" && input != "5" && input != "8")
+        {
+            cout << "Invalid input, please enter a valid input: ";
+            getline(cin, input);
+        }
+
         try
         {
             stop = stod(input);
@@ -71,8 +89,8 @@ int main(int argc, char *argv[])
         }
 
         data_len = input.length();
-
         int sent_bytes = send(sock, input.c_str(), data_len, 0);
+
         if (sent_bytes < 0)
         {
             perror("error in sending");
@@ -80,6 +98,7 @@ int main(int argc, char *argv[])
 
         if (data_len == 1 && input == "1")
         {
+
             recv(sock, buffer, sizeof(buffer), 0);
             cout << buffer << endl;
             string fileName;
@@ -111,12 +130,8 @@ int main(int argc, char *argv[])
             file.close();
             memset(buffer, 0, sizeof(buffer));
             recv(sock, buffer, sizeof(buffer), 0);
-            cout << buffer;
+            cout << buffer << endl;
 
-            /////
-
-            recv(sock, buffer, sizeof(buffer), 0);
-            cout << buffer;
             string fileNameTrain;
             cin >> fileNameTrain;
 
@@ -146,8 +161,30 @@ int main(int argc, char *argv[])
             }
             fileTrain.close();
             memset(buffer, 0, sizeof(buffer));
-            recv(sock, buffer, sizeof(buffer), 0);
-            cout << buffer << endl;
+
+            // recive Upload complete.
+            recv(sock, buffer, sizeof("Upload complete.\n"), 0);
+            cout << buffer;
+        }
+
+        if (data_len == 1 && input == "2")
+        {
+            memset(buffer, 0, sizeof(buffer));
+
+            // get bytes in the size of the description
+            recv(sock, buffer, 65, 0);
+            cout << buffer;
+            memset(buffer, 0, sizeof(buffer));
+
+            string newParms;
+            cin >> newParms;
+            send(sock, newParms.c_str(), sizeof(newParms), 0);
+        }
+
+        if (data_len == 1 && input == "8")
+        {
+
+            break;
         }
     }
     close(sock);

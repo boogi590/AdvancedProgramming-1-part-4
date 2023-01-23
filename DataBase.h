@@ -14,6 +14,7 @@ class DataBase
 public:
     static multimap<vector<double>, string> createDataBaseFromFIle(string nameOfFile);
     static multimap<vector<double>, string> createDataBaseFromString(string file);
+    static vector<vector<double>> createTestVectors(string testFile);
 
 private:
     static bool dataBaseValidation(multimap<vector<double>, string> &);
