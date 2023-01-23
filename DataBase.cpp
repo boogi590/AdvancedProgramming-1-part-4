@@ -165,6 +165,7 @@ vector<vector<double>> DataBase::createTestVectors(string testFile)
             dataBase.push_back(values);
         }
     }
+    return dataBase;
 }
 
 bool DataBase::dataBaseValidation(multimap<vector<double>, string> &dataBase)
