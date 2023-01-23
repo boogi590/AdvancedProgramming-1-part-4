@@ -22,20 +22,23 @@ void SettingsCommand::execute()
 
     string input = string(buffer, bytes);
 
-    int k;
+    bool invaild = false;
+    int tempK;
     string distanceFunc;
     string error;
     stringstream stream(input);
-    stream >> k;
+    stream >> tempK;
     stream >> distanceFunc;
 
-    if (k <= 0)
+    if (tempK <= 0)
     {
+        invaild = true;
         error = "invaild value for K\n";
     }
     // CHECK: If K is greater than the number of vectors in the database we define him to be the size of the database.
-    if (k > database.size())
+    if (tempK > database.size())
     {
+        invaild = true;
         error = "invaild value for K\n";
     }
 
@@ -46,6 +49,19 @@ void SettingsCommand::execute()
     double tempDistance = Distance::distanceAcorddingTo(v1, v2, distanceFunc);
     if (tempDistance == -1)
     {
+        invaild = true;
         error += "invalid value for metric\n";
+    }
+
+    if (!invaild)
+    {
+        this->distanceMatric = distanceFunc;
+        this->k = tempK;
+        string changed = "changed";
+        send(socket.getSock(), changed.c_str(), changed.size(), 0);
+    }
+    else
+    {
+        send(socket.getSock(), error.c_str(), error.size(), 0);
     }
 }

@@ -179,6 +179,14 @@ int main(int argc, char *argv[])
             string newParms;
             cin >> newParms;
             send(sock, newParms.c_str(), sizeof(newParms), 0);
+
+            memset(buffer, 0, sizeof(buffer));
+
+            recv(sock, buffer, sizeof(buffer), 0);
+            if (buffer != "changed")
+            {
+                cout << buffer;
+            }
         }
 
         if (data_len == 1 && input == "8")
