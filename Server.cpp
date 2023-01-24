@@ -129,7 +129,6 @@ int main(int argc, char *argv[])
             continue;
         }
 
-
         // create a new thread to handle the client
         pthread_t thread;
         int rc = pthread_create(&thread, NULL, handle_client, (void *)&client_sock);

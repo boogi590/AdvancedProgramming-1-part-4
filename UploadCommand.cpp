@@ -19,7 +19,17 @@ void UploadCommand::execute()
     char buffer[4096];
 
     // Receive the file size
-    recv(socket.getSock(), (char *)&fileSizeTrain, sizeof(fileSizeTrain), 0);
+    int bytes = recv(socket.getSock(), (char *)&fileSizeTrain, sizeof(fileSizeTrain), 0);
+
+    if (fileSizeTrain <= 0)
+    {
+        return;
+    }
+
+    if (bytes <= 0)
+    {
+        close(socket.getSock());
+    }
 
     // Receive the file
     while (bytes_received_total < fileSizeTrain)
@@ -43,12 +53,24 @@ void UploadCommand::execute()
     string fileTest;
     memset(buffer, 0, sizeof(buffer));
     // Receive the file size
-    recv(socket.getSock(), (char *)&fileSizeTest, sizeof(fileSizeTest), 0);
+    bytes = recv(socket.getSock(), (char *)&fileSizeTest, sizeof(fileSizeTest), 0);
 
+    if (fileSizeTest <= 0)
+    {
+        return;
+    }
+    if (bytes <= 0)
+    {
+        close(socket.getSock());
+    }
     // Receive the file
     while (bytes_received_total < fileSizeTest)
     {
         int bytes_received = recv(socket.getSock(), buffer, sizeof(buffer), 0);
+        if (bytes_received <= 0)
+        {
+            close(socket.getSock());
+        }
         bytes_received_total += bytes_received;
         fileTest += string(buffer, sizeof(buffer));
     }

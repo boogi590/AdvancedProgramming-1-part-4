@@ -15,7 +15,7 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <stdlib.h>
-
+#include <unistd.h>
 class UploadCommand : public Command
 {
 public:
