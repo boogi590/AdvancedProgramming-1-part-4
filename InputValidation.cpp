@@ -52,3 +52,13 @@ vector<double> InputValidation::inputFromUser()
     }
     return vector;
 }
+
+bool InputValidation::menuCheck(int num)
+{
+    // the menu num are 1-5(including) and 8.
+    if (num < 1 || num > 8 || num == 6 || num == 7)
+    {
+        return false;
+    }
+    return true;
+}

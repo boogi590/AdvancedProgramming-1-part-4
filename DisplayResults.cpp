@@ -1,9 +1,10 @@
 #include "DisplayResults.h"
-DisplayResults :: DisplayResults(map<int, string> &classify_data,FlowControl &fc){
+DisplayResults :: DisplayResults(map<int, string> &classify_data,FlowControl &fc) {
     this->classify_data = classify_data;
     this->flow_control = fc;
 }
 void DisplayResults :: execute() {
+    /**
     if(!flow_control.did_data_classified)
     {
         IO->write("please classify the data");
@@ -14,15 +15,18 @@ void DisplayResults :: execute() {
         IO->write("please upload data");
         return;
     }
+    */
     
     for(map<int,string>::iterator mit = classify_data.begin(); mit != classify_data.end(); mit++)
     {
         pair<int,string> data = *mit;
+        cout<<to_string(data.first) << "    " << data.second << endl;
         IO->write(to_string(data.first));
         IO->write(" ");
         IO->write(data.second);
         IO->write("\n");
     }
+    cout << ".Done"<< endl;
     IO->write(".Done");
     
 }
