@@ -11,7 +11,7 @@ ClassifyData::ClassifyData(const multimap<vector<double>, string> &database,
 
 void ClassifyData::execute()
 {
-    //if the user didnt upload files then return and print error.
+    // if the user didnt upload files then return and print error.
     if (!flow_control.did_files_uploaded)
     {
         IO->write("please upload data");

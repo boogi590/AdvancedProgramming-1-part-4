@@ -26,6 +26,6 @@ public:
 private:
     string description;
     SocketIO socket;
-    multimap<vector<double>, string> &database;
-    vector<vector<double>> &test;
+    multimap<vector<double>, string> database;
+    vector<vector<double>> test;
 };

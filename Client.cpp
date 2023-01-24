@@ -196,8 +196,16 @@ int main(int argc, char *argv[])
             string newParms;
             getline(cin, newParms);
 
-            send(sock, newParms.c_str(), newParms.length(), 0);
+            if (newParms.length() == 0)
+            {
 
+                send(sock, "EMPTY", 6, 0);
+                continue;
+            }
+            else
+            {
+                send(sock, newParms.c_str(), newParms.length(), 0);
+            }
             memset(buffer, 0, sizeof(buffer));
 
             recv(sock, buffer, 45, 0);

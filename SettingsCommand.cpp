@@ -10,6 +10,8 @@ SettingsCommand::SettingsCommand(SocketIO socket, multimap<vector<double>, strin
 
 void SettingsCommand::execute()
 {
+    string error;
+
     this->description = "The current KNN parameters are: K = " + to_string(this->k) + ", DISTANCE METRIC = " + this->distanceMatric + "\n";
     send(socket.getSock(), description.c_str(), description.size(), 0);
 
@@ -18,6 +20,13 @@ void SettingsCommand::execute()
 
     // Receive the file size
     int bytes = recv(socket.getSock(), buffer, sizeof(buffer), 0);
+    string answer = string(buffer, 5);
+    if (answer == "EMPTY")
+    {
+        memset(buffer, 0, sizeof(buffer));
+        return;
+    }
+
     if (bytes <= 0)
     {
         close(socket.getSock());
@@ -28,7 +37,6 @@ void SettingsCommand::execute()
     bool invaild = false;
     double tempK;
     string distanceFunc;
-    string error;
     stringstream stream(input);
     stream >> tempK;
     stream >> distanceFunc;
