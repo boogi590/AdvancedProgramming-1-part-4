@@ -1,5 +1,4 @@
 #include "SettingsCommand.h"
-
 SettingsCommand::SettingsCommand(SocketIO socket, multimap<vector<double>, string> &database,
                                  int &k, string &distanceMatric) : socket(socket),
                                                                    database(database),
@@ -19,24 +18,34 @@ void SettingsCommand::execute()
 
     // Receive the file size
     int bytes = recv(socket.getSock(), buffer, sizeof(buffer), 0);
+    if (bytes <= 0)
+    {
+        close(socket.getSock());
+    }
 
     string input = string(buffer, bytes);
 
     bool invaild = false;
-    int tempK;
+    double tempK;
     string distanceFunc;
     string error;
     stringstream stream(input);
     stream >> tempK;
     stream >> distanceFunc;
 
-    if (tempK <= 0)
+    if (!InputValidation::intOrDouble(tempK))
+    {
+
+        invaild = true;
+        error = "invaild value for K\n";
+    }
+    if (tempK <= 0 && !invaild)
     {
         invaild = true;
         error = "invaild value for K\n";
     }
     // CHECK: If K is greater than the number of vectors in the database we define him to be the size of the database.
-    if (tempK > database.size())
+    if (tempK > database.size() && !invaild)
     {
         invaild = true;
         error = "invaild value for K\n";

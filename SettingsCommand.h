@@ -1,6 +1,6 @@
 #include "Command.h"
 #include "Distance.h"
-
+#include <unistd.h>
 #include "SocketIO.h"
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -11,6 +11,7 @@
 #include <iostream>
 #include <vector>
 #include <map>
+#include "InputValidation.h"
 
 class SettingsCommand : public Command
 {
