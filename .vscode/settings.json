@@ -10,6 +10,7 @@
         "limits": "cpp",
         "sstream": "cpp",
         "stdexcept": "cpp",
-        "map": "cpp"
+        "map": "cpp",
+        "iosfwd": "cpp"
     }
 }

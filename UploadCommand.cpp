@@ -10,7 +10,9 @@ UploadCommand::UploadCommand(SocketIO socket, multimap<vector<double>, string> &
 
 void UploadCommand::execute()
 {
-    send(socket.getSock(), description.c_str(), description.length(), 0);
+    string train = "Please upload your local train CSV file.";
+
+    send(socket.getSock(), train.c_str(), train.length(), 0);
     int fileSizeTrain = 0;
     int bytes_received_total = 0;
     string fileTrain;
@@ -51,6 +53,7 @@ void UploadCommand::execute()
         fileTest += string(buffer, sizeof(buffer));
     }
     this->test = DataBase::createTestVectors(fileTest);
+
     //  cout << fileTest;
 
     string uploadTest = "Upload complete.\n";
