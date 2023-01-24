@@ -13,8 +13,66 @@
 #include "KNN.h"
 #include "UploadCommand.h"
 #include "SettingsCommand.h"
+#include "FlowControl.h"
 
 using namespace std;
+
+void *handle_client(void *arg)
+{
+    string menu = "Welcome to the KNN Classifier Server. Please choose an option:\n1. upload an unclassified csv data file\n2. algorithm settings\n3. classify data\n4. display result\n5. download results\n8. exit";
+
+    int client_sock = *(int *)arg;
+    SocketIO socket(client_sock);
+    multimap<vector<double>, string> dataBase;
+    vector<vector<double>> test;
+    string distanceMatric = "AUC";
+    int k = 5;
+    FlowControl flowControl;
+    while (true)
+    {
+        char buffer[4096];
+        memset(buffer, 0, sizeof(buffer));
+        int read_bytes = send(client_sock, menu.c_str(), menu.length(), 0);
+
+        bool invalidFlag = false;
+        string classification = "invalid input";
+        memset(buffer, 0, sizeof(buffer));
+
+        int expected_data_len = sizeof(buffer);
+        read_bytes = recv(client_sock, buffer, sizeof(buffer), 0);
+
+        if (read_bytes == 0)
+        {
+            break;
+        }
+        else if (read_bytes < 0)
+        {
+            invalidFlag = true;
+            classification = "invalid input";
+        }
+        else
+        {
+            if (strlen(buffer) == 1 && buffer[0] == '1')
+            {
+                memset(buffer, 0, sizeof(buffer));
+                UploadCommand command(socket, dataBase, test);
+                command.execute();
+            }
+
+            if (strlen(buffer) == 1 && buffer[0] == '2')
+            {
+                memset(buffer, 0, sizeof(buffer));
+                SettingsCommand settingCommand(socket, dataBase, k, distanceMatric);
+                settingCommand.execute();
+            }
+
+            // handle other menu options
+        }
+    }
+    close(client_sock);
+    pthread_exit(NULL);
+}
+
 /*
  *creating a TCP server to accept from client vector, distance function and K for KNN algorithem. returning KNN result to client.
  *wating for clients to connet in infinite loop.
@@ -22,7 +80,6 @@ using namespace std;
 int main(int argc, char *argv[])
 {
     string classification;
-    string menu = "Welcome to the KNN Classifier Server. Please choose an option:\n1. upload an unclassified csv data file\n2. algorithm settings\n3. classify data\n4. display result\n5. download results\n8. exit";
 
     if (argc != 2)
     {
@@ -62,69 +119,25 @@ int main(int argc, char *argv[])
     }
     while (true)
     {
+
         struct sockaddr_in client_sin;
         unsigned int addr_len = sizeof(client_sin);
         int client_sock = accept(sock, (struct sockaddr *)&client_sin, &addr_len);
         if (client_sock < 0)
         {
             perror("error accepting client");
+            continue;
         }
-        SocketIO socket(client_sock);
 
-        multimap<vector<double>, string> dataBase;
-        vector<vector<double>> test;
-        string distanceMatric = "AUC";
-        int k = 5;
-        while (true)
+        // create a new thread to handle the client
+        pthread_t thread;
+        int rc = pthread_create(&thread, NULL, handle_client, (void *)&client_sock);
+        if (rc)
         {
-
-            char buffer[4096];
-            memset(buffer, 0, sizeof(buffer));
-            int read_bytes = send(client_sock, menu.c_str(), menu.length(), 0);
-
-            bool invalidFlag = false;
-            string classification = "invalid input";
-            memset(buffer, 0, sizeof(buffer));
-
-            int expected_data_len = sizeof(buffer);
-            read_bytes = recv(client_sock, buffer, sizeof(buffer), 0);
-
-            if (read_bytes == 0)
-            {
-                break;
-            }
-            else if (read_bytes < 0)
-            {
-                invalidFlag = true;
-                classification = "invalid input";
-            }
-            else
-            {
-
-                if (strlen(buffer) == 1 && buffer[0] == '1')
-                {
-
-                    memset(buffer, 0, sizeof(buffer));
-                    UploadCommand command(socket, dataBase, test);
-                    command.execute();
-                }
-
-                if (strlen(buffer) == 1 && buffer[0] == '2')
-                {
-
-                    memset(buffer, 0, sizeof(buffer));
-                    SettingsCommand settingCommand(socket, dataBase, k, distanceMatric);
-                    settingCommand.execute();
-                }
-
-                if (strlen(buffer) == 1 && buffer[0] == '8')
-                {
-
-                    break;
-                }
-            }
+            perror("error creating thread");
+            close(client_sock);
+            continue;
         }
-        close(client_sock);
     }
     close(sock);
     return 0;
