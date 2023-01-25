@@ -8,6 +8,8 @@
 #include <fstream>
 #include <limits>
 
+#define MENU_SIZE 187
+
 using namespace std;
 
 int main(int argc, char *argv[])
@@ -56,12 +58,14 @@ int main(int argc, char *argv[])
     string input;
     while (true)
     {
+
         char buffer[4096];
         memset(buffer, 0, sizeof(buffer));
 
-        recv(sock, buffer, 187, 0);
+        recv(sock, buffer, MENU_SIZE, 0);
 
         cout << buffer << endl;
+        string menu = string(buffer, MENU_SIZE);
 
         memset(buffer, 0, sizeof(buffer));
 
@@ -75,7 +79,9 @@ int main(int argc, char *argv[])
 
         while (input != "1" && input != "2" && input != "3" && input != "4" && input != "5" && input != "8")
         {
-            cout << "Invalid input, please enter a valid input: ";
+            cout << "invalid input" << endl;
+
+            cout << menu << endl;
             getline(cin, input);
         }
 
@@ -110,8 +116,11 @@ int main(int argc, char *argv[])
             ifstream file(fileName, ios::binary);
             if (!file)
             {
-                cerr << "Error opening file" << endl;
-                exit(1);
+                int size = 0;
+                cout << "invalid input" << endl;
+                send(sock, (char *)&size, sizeof(size), 0);
+
+                continue;
             }
 
             // Get the file size
@@ -141,8 +150,11 @@ int main(int argc, char *argv[])
             ifstream fileTrain(fileNameTrain, ios::binary);
             if (!fileTrain)
             {
-                cerr << "Error opening file" << endl;
-                exit(1);
+                int size = 0;
+                cout << "invalid input" << endl;
+                send(sock, (char *)&size, sizeof(size), 0);
+
+                continue;
             }
 
             // Get the file size
@@ -184,8 +196,16 @@ int main(int argc, char *argv[])
             string newParms;
             getline(cin, newParms);
 
-            send(sock, newParms.c_str(), newParms.length(), 0);
+            if (newParms.length() == 0)
+            {
 
+                send(sock, "EMPTY", 6, 0);
+                continue;
+            }
+            else
+            {
+                send(sock, newParms.c_str(), newParms.length(), 0);
+            }
             memset(buffer, 0, sizeof(buffer));
 
             recv(sock, buffer, 45, 0);

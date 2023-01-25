@@ -5,9 +5,9 @@ class FlowControl
 public:
     bool did_files_uploaded;
     bool did_data_classified;
-    //constructor.
+    // constructor.
     FlowControl();
-    //setters.
+    // setters.
     void setDidFilesUploaded(bool value);
     void setDidDataClassified(bool value);
 };

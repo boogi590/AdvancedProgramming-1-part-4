@@ -1,5 +1,4 @@
 #include "SettingsCommand.h"
-
 SettingsCommand::SettingsCommand(SocketIO socket, multimap<vector<double>, string> &database,
                                  int &k, string &distanceMatric) : socket(socket),
                                                                    database(database),
@@ -11,7 +10,8 @@ SettingsCommand::SettingsCommand(SocketIO socket, multimap<vector<double>, strin
 
 void SettingsCommand::execute()
 {
-    cout << "database size =" << database.size() << endl;
+    string error;
+
     this->description = "The current KNN parameters are: K = " + to_string(this->k) + ", DISTANCE METRIC = " + this->distanceMatric + "\n";
     send(socket.getSock(), description.c_str(), description.size(), 0);
 
@@ -20,24 +20,40 @@ void SettingsCommand::execute()
 
     // Receive the file size
     int bytes = recv(socket.getSock(), buffer, sizeof(buffer), 0);
+    string answer = string(buffer, 5);
+    if (answer == "EMPTY")
+    {
+        memset(buffer, 0, sizeof(buffer));
+        return;
+    }
+
+    if (bytes <= 0)
+    {
+        close(socket.getSock());
+    }
 
     string input = string(buffer, bytes);
 
     bool invaild = false;
-    int tempK;
+    double tempK;
     string distanceFunc;
-    string error;
     stringstream stream(input);
     stream >> tempK;
     stream >> distanceFunc;
 
-    if (tempK <= 0)
+    if (!InputValidation::intOrDouble(tempK))
+    {
+
+        invaild = true;
+        error = "invaild value for K\n";
+    }
+    if (tempK <= 0 && !invaild)
     {
         invaild = true;
         error = "invaild value for K\n";
     }
     // CHECK: If K is greater than the number of vectors in the database we define him to be the size of the database.
-    if (tempK > database.size())
+    if (tempK > database.size() && !invaild)
     {
         invaild = true;
         error = "invaild value for K\n";
