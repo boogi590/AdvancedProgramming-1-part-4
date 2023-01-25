@@ -41,6 +41,8 @@ void *handle_client(void *arg)
     //************** end of client data *****************************************************************************
     while (true)
     {
+        // DataBase::printDataBase(dataBase);
+        // DataBase::printTrainFile(test);
         char buffer[4096];
         memset(buffer, 0, sizeof(buffer));
         int read_bytes = send(client_sock, menu.c_str(), menu.length(), 0);

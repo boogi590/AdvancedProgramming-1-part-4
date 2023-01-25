@@ -135,6 +135,8 @@ int main(int argc, char *argv[])
             char buffer[4096];
             while (file)
             {
+                memset(buffer, 0, sizeof(buffer));
+
                 file.read(buffer, sizeof(buffer));
                 int bytes_read = file.gcount();
                 send(sock, buffer, bytes_read, 0);
@@ -170,8 +172,12 @@ int main(int argc, char *argv[])
 
             while (fileTrain)
             {
+                memset(buffer, 0, sizeof(buffer));
+
                 fileTrain.read(buffer, sizeof(buffer));
-                int bytes_read = file.gcount();
+                int bytes_read = fileTrain.gcount();
+                cout << bytes_read;
+
                 send(sock, buffer, bytes_read, 0);
             }
             fileTrain.close();
