@@ -1,9 +1,10 @@
 #include "DisplayResults.h"
-DisplayResults :: DisplayResults(map<int, string> &classify_data,FlowControl &fc) {
-    this->classify_data = classify_data;
-    this->flow_control = fc;
+DisplayResults ::DisplayResults(map<int, string> &classify_data, FlowControl &fc) : classify_data(classify_data),
+                                                                                    flow_control(fc)
+{
 }
-void DisplayResults :: execute() {
+void DisplayResults ::execute()
+{
     /**
     if(!flow_control.did_data_classified)
     {
@@ -16,17 +17,16 @@ void DisplayResults :: execute() {
         return;
     }
     */
-    
-    for(map<int,string>::iterator mit = classify_data.begin(); mit != classify_data.end(); mit++)
+    cout << "classifyData size=" << classify_data.size() << endl;
+    for (map<int, string>::iterator mit = classify_data.begin(); mit != classify_data.end(); mit++)
     {
-        pair<int,string> data = *mit;
-        cout<<to_string(data.first) << "    " << data.second << endl;
-        IO->write(to_string(data.first));
-        IO->write(" ");
-        IO->write(data.second);
-        IO->write("\n");
+        pair<int, string> data = *mit;
+        cout << to_string(data.first) << "    " << data.second << endl;
+        // IO->write(to_string(data.first));
+        // IO->write(" ");
+        // IO->write(data.second);
+        // IO->write("\n");
     }
-    cout << ".Done"<< endl;
-    IO->write(".Done");
-    
+    cout << ".Done" << endl;
+    // IO->write(".Done");
 }
