@@ -82,6 +82,8 @@ void UploadCommand::execute()
 
     // cout << fileTest;
     this->flowC.setDidFilesUploaded(true);
+    this->flowC.setDidDataClassified(false);
+
     string uploadTest = "Upload complete.\n";
     send(socket.getSock(), uploadTest.c_str(), uploadTest.length(), 0);
 }
