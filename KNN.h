@@ -1,4 +1,5 @@
-
+#ifndef _KNN_H
+#define _KNN_H
 #include "Distance.h"
 #include <map>
 #include <algorithm>
@@ -16,3 +17,4 @@ private:
 
     multimap<double, string> distanceFromVector(vector<double> vec);
 };
+#endif

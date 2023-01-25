@@ -9,8 +9,8 @@ class DisplayResults : public Command
 private:
     // classify_data = map of key = int and value =string such that the key =the line in the test CSV file and
     // value =the classifion of the vector in this line.
-    map<int, string> classify_data;
-    FlowControl flow_control;
+    map<int, string> &classify_data;
+    FlowControl &flow_control;
 
 public:
     void execute();
