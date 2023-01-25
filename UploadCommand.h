@@ -1,5 +1,7 @@
 #include "Command.h"
 #include "SocketIO.h"
+#include "FlowControl.h"
+
 #include <map>
 #include <vector>
 #include "DataBase.h"
@@ -19,13 +21,14 @@
 class UploadCommand : public Command
 {
 public:
-    UploadCommand(SocketIO socket, multimap<vector<double>, string> &database, vector<vector<double>> &test);
+    UploadCommand(SocketIO socket, multimap<vector<double>, string> &database, vector<vector<double>> &test, FlowControl &flowC);
 
     void execute() override;
 
 private:
     string description;
     SocketIO socket;
-    multimap<vector<double>, string> database;
-    vector<vector<double>> test;
+    multimap<vector<double>, string> &database;
+    vector<vector<double>> &test;
+    FlowControl &flowC;
 };

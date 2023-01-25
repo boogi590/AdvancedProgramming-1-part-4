@@ -1,9 +1,10 @@
 #include "UploadCommand.h"
 
 UploadCommand::UploadCommand(SocketIO socket, multimap<vector<double>, string> &database,
-                             vector<vector<double>> &test) : socket(socket),
-                                                             database(database),
-                                                             test(test)
+                             vector<vector<double>> &test, FlowControl &flowC) : socket(socket),
+                                                                                 database(database),
+                                                                                 test(test),
+                                                                                 flowC(flowC)
 
 {
 }
@@ -66,18 +67,21 @@ void UploadCommand::execute()
     // Receive the file
     while (bytes_received_total < fileSizeTest)
     {
+        memset(buffer, 0, sizeof(buffer));
+
         int bytes_received = recv(socket.getSock(), buffer, sizeof(buffer), 0);
         if (bytes_received <= 0)
         {
             close(socket.getSock());
         }
+        cout << "bytes_received_total" << bytes_received_total << endl;
         bytes_received_total += bytes_received;
         fileTest += string(buffer, sizeof(buffer));
     }
     this->test = DataBase::createTestVectors(fileTest);
 
-    //  cout << fileTest;
-
+    // cout << fileTest;
+    this->flowC.setDidFilesUploaded(true);
     string uploadTest = "Upload complete.\n";
     send(socket.getSock(), uploadTest.c_str(), uploadTest.length(), 0);
 }

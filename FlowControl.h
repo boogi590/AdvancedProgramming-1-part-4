@@ -1,4 +1,5 @@
-
+#ifndef _FLOWCONTROL_H
+#define _FLOWCONTROL_H
 class FlowControl
 {
 public:
@@ -10,3 +11,4 @@ public:
     void setDidFilesUploaded(bool value);
     void setDidDataClassified(bool value);
 };
+#endif

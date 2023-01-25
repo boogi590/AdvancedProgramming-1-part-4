@@ -30,6 +30,8 @@ void *handle_client(void *arg)
     FlowControl flowControl;
     while (true)
     {
+        // DataBase::printDataBase(dataBase);
+        // DataBase::printTrainFile(test);
         char buffer[4096];
         memset(buffer, 0, sizeof(buffer));
         int read_bytes = send(client_sock, menu.c_str(), menu.length(), 0);
@@ -55,7 +57,7 @@ void *handle_client(void *arg)
             if (strlen(buffer) == 1 && buffer[0] == '1')
             {
                 memset(buffer, 0, sizeof(buffer));
-                UploadCommand command(socket, dataBase, test);
+                UploadCommand command(socket, dataBase, test, flowControl);
                 command.execute();
             }
 
