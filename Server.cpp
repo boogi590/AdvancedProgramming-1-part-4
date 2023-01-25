@@ -41,7 +41,6 @@ void *handle_client(void *arg)
     //************** end of client data *****************************************************************************
     while (true)
     {
-        cout << "fuck here"<<endl;
         char buffer[4096];
         memset(buffer, 0, sizeof(buffer));
         int read_bytes = send(client_sock, menu.c_str(), menu.length(), 0);
@@ -55,17 +54,15 @@ void *handle_client(void *arg)
         }
         else
         {
-            //convert from char to int.
+            // convert from char to int.
             int userChiose = buffer[0] - '0';
-            cout << "porkeee horhaaaaa" << endl;
-            cout << userChiose << endl;
             if (InputValidation::menuCheck(userChiose))
             {
+                cout << "database size =" << dataBase.size() << endl;
+                cout << "test size=" << test.size() << endl;
                 memset(buffer, 0, sizeof(buffer));
                 commandArray[userChiose - 1]->execute();
-                cout<< "here" << endl;
             }
-
         }
     }
     close(client_sock);

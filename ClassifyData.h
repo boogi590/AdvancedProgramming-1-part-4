@@ -9,12 +9,12 @@ using namespace std;
 class ClassifyData : public Command
 {
 protected:
-    multimap<vector<double>, string> database;
-    vector<vector<double>> testCSV;
+    multimap<vector<double>, string> &database;
+    vector<vector<double>> &testCSV;
     int k;
     string distance_metric;
-    FlowControl flow_control;
-    map<int, string> classify_data;
+    FlowControl &flow_control;
+    map<int, string> &classify_data;
 
 public:
     ClassifyData(multimap<vector<double>, string> &database,

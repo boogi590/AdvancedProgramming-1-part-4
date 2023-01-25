@@ -11,6 +11,7 @@ SettingsCommand::SettingsCommand(SocketIO socket, multimap<vector<double>, strin
 
 void SettingsCommand::execute()
 {
+    cout << "database size =" << database.size() << endl;
     this->description = "The current KNN parameters are: K = " + to_string(this->k) + ", DISTANCE METRIC = " + this->distanceMatric + "\n";
     send(socket.getSock(), description.c_str(), description.size(), 0);
 
