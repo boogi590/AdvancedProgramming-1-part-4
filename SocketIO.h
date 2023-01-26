@@ -1,18 +1,25 @@
 #ifndef _SOCKETIO_H
 #define _SOCKETIO_H
 #include "DefaultIO.h"
+#include <iostream>
+#include <sys/socket.h>
+#include <unistd.h>
 
 class SocketIO : public DefaultIO
 {
-public:
-    SocketIO(int sokcet);
-    SocketIO();
-
-    string read() override;
-    void write(string) override;
-    int getSock();
-
 private:
     int socketNum;
+
+public:
+    // constructor.
+    SocketIO(int sokcet);
+
+    // getter.
+    int getSock();
+
+    // The implementation of the abstract class.
+    string read();
+    string read(char* writeTo);
+    void write(string) override;
 };
 #endif
