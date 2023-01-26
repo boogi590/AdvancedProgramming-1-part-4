@@ -1,5 +1,4 @@
-[![Typing SVG](https://readme-typing-svg.demolab.com?font=ARIEL&weight=500&size=30&duration=3000&pause=1000&color=F7AE6C&background=FF51F800&multiline=true&width=435&lines=Advance++Programming+By+Amit+%26+Simon)](https://git.io/typing-svg)
-
+[![Typing SVG](https://readme-typing-svg.demolab.com?font=ARIEL&weight=500&size=30&duration=3000&pause=200&color=F7AE6C&background=FF51F800&multiline=true&width=600&height=100&lines=Advance++Programming+Project;+By+Amit+%26+Simon)](https://git.io/typing-svg)
 
 
 Advanced Programming  project by Amit Hazan and Simon Fraiberg
