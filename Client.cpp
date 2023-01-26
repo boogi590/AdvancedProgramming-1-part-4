@@ -1,21 +1,35 @@
 #include <iostream>
 #include <sys/socket.h>
 #include <stdio.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
 #include <unistd.h>
 #include <string.h>
 #include <fstream>
 #include <limits>
-
+#include "InputValidation.h"
+#include "ReadWriteFiles.h"
+using namespace std;
 #define MENU_SIZE 187
 
-using namespace std;
+void *writeData(void *sock)
+{
+    int socketID = *(int *)sock;
+    char buffer[4096];
+    // recving and printing the command 5 description.
+    recv(socketID, buffer, sizeof(buffer), 0);
+    cout << buffer << endl;
+    string address;
+    cin >> address;
+    memset(buffer, 0, sizeof(buffer));
+    // Receive the file
+    recv(socketID, buffer, sizeof(buffer), 0);
+    ReadWriteFiles ::writeToFile(buffer, address);
+}
 
 int main(int argc, char *argv[])
 {
+    /*********************************CHECK THE ARGS*******************************/
     const char *ip_address = argv[1];
-    // CHECK if the input string is a valid IP address:
+    // CHECK if the the user entered a valid IP address:
     // output buffer for the binary representation of the IP address
     in_addr output;
     if (inet_pton(AF_INET, ip_address, &output) != 1)
@@ -35,8 +49,9 @@ int main(int argc, char *argv[])
         cout << "port number is not valid \n";
         return 0;
     }
-
     const int port_number = temp;
+    /*************************************END OF CHECKS**********************************/
+
     // AF_INET = IPv4, SOCK_STREAM = TCP.
     int sock = socket(AF_INET, SOCK_STREAM, 0);
     if (sock < 0)
@@ -49,45 +64,40 @@ int main(int argc, char *argv[])
     sin.sin_family = AF_INET;
     sin.sin_addr.s_addr = inet_addr(ip_address);
     sin.sin_port = htons(port_number);
+    // connect < 0 means that error occured.
     if (connect(sock, (struct sockaddr *)&sin, sizeof(sin)) < 0)
     {
         perror("error connecting to server");
     }
+    // connected to server succesfully.
     int stop;
     int data_len;
-    string input;
+    string userChoise;
     while (true)
     {
-
         char buffer[4096];
         memset(buffer, 0, sizeof(buffer));
-
+        // receving the menu.
         recv(sock, buffer, MENU_SIZE, 0);
-
         cout << buffer << endl;
+        // saving the menu.
         string menu = string(buffer, MENU_SIZE);
-
         memset(buffer, 0, sizeof(buffer));
-
-        getline(cin, input);
-
-        while (input.empty() || !input.compare(""))
+        getline(cin, userChoise);
+        while (userChoise.empty() || !userChoise.compare(""))
         {
-
-            getline(cin, input);
+            getline(cin, userChoise);
         }
 
-        while (input != "1" && input != "2" && input != "3" && input != "4" && input != "5" && input != "8")
+        while (!InputValidation::menuCheck(stoi(userChoise)))
         {
-            cout << "invalid input" << endl;
-
+            cout << "invalid userChoise" << endl;
             cout << menu << endl;
-            getline(cin, input);
+            getline(cin, userChoise);
         }
-
         try
         {
-            stop = stod(input);
+            stop = stod(userChoise);
             if (stop == -1)
             {
                 break;
@@ -97,27 +107,26 @@ int main(int argc, char *argv[])
         {
         }
 
-        data_len = input.length();
-        int sent_bytes = send(sock, input.c_str(), data_len, 0);
-
+        // sending the userChoise from the menu to the server.
+        data_len = userChoise.length();
+        int sent_bytes = send(sock, userChoise.c_str(), data_len, 0);
         if (sent_bytes < 0)
         {
             perror("error in sending");
         }
 
-        if (data_len == 1 && input == "1")
+        // command 1 = reading the file and sending it to the server.
+        if (data_len == 1 && userChoise == "1")
         {
-
             recv(sock, buffer, sizeof(buffer), 0);
             cout << buffer << endl;
             string fileName;
             cin >> fileName;
-
             ifstream file(fileName, ios::binary);
             if (!file)
             {
                 int size = 0;
-                cout << "invalid input" << endl;
+                cout << "invalid userChoise" << endl;
                 send(sock, (char *)&size, sizeof(size), 0);
 
                 continue;
@@ -152,7 +161,7 @@ int main(int argc, char *argv[])
             if (!fileTrain)
             {
                 int size = 0;
-                cout << "invalid input" << endl;
+                cout << "invalid userChoise" << endl;
                 send(sock, (char *)&size, sizeof(size), 0);
 
                 continue;
@@ -184,23 +193,19 @@ int main(int argc, char *argv[])
             cout << buffer;
         }
 
-        if (data_len == 1 && input == "2")
+        if (data_len == 1 && userChoise == "2")
         {
             char buffer[4096];
-
             memset(buffer, 0, sizeof(buffer));
-
             // get bytes in the size of the description
             recv(sock, buffer, 65, 0);
             cout << buffer;
             memset(buffer, 0, sizeof(buffer));
-
             string newParms;
             getline(cin, newParms);
 
             if (newParms.length() == 0)
             {
-
                 send(sock, "EMPTY", 6, 0);
                 continue;
             }
@@ -219,9 +224,20 @@ int main(int argc, char *argv[])
             memset(buffer, 0, sizeof(buffer));
         }
 
-        if (data_len == 1 && input == "8")
+        if (data_len == 1 && userChoise == "5")
         {
-
+            // create a new thread to handle the client
+            pthread_t thread;
+            int createSucessfully = pthread_create(&thread, NULL, writeData, (void *)sock);
+            if (createSucessfully)
+            {
+                perror("error creating thread");
+                close(sock);
+                continue;
+            }
+        }
+        if (data_len == 1 && userChoise == "8")
+        {
             break;
         }
     }

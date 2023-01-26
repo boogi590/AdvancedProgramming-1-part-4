@@ -183,3 +183,31 @@ bool DataBase::dataBaseValidation(multimap<vector<double>, string> &dataBase)
 
     return true;
 }
+
+void DataBase::printDataBase(multimap<vector<double>, string> dataBase)
+{
+    for (auto it = dataBase.begin(); it != dataBase.end(); it++)
+    {
+        for (auto num : it->first)
+        {
+            std::cout << num << ",";
+        }
+        cout << " " << it->second;
+
+        std::cout << std::endl;
+    }
+}
+
+void DataBase::printTrainFile(vector<vector<double>> test)
+{
+    int line = 1;
+    for (auto vec : test)
+    {
+        cout << line++ << " :";
+        for (auto num : vec)
+        {
+            std::cout << num << ",";
+        }
+        std::cout << "\n";
+    }
+}

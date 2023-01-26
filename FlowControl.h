@@ -11,5 +11,4 @@ public:
     void setDidFilesUploaded(bool value);
     void setDidDataClassified(bool value);
 };
-
 #endif
