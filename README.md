@@ -1,4 +1,4 @@
-[![Typing SVG](https://readme-typing-svg.demolab.com?font=ARIEL&weight=500&size=30&duration=3000&pause=200&color=F7AE6C&background=FF51F800&multiline=true&width=600&height=100&lines=Advance++Programming+Project;+By+Amit+%26+Simon)](https://git.io/typing-svg)
+[![Typing SVG](https://readme-typing-svg.demolab.com?font=ARIEL&weight=500&size=30&duration=3000&pause=200&color=F7AE6C&background=FF51F800&multiline=true&repeat=false&width=600&height=100&lines=Advance++Programming+Project;+By+Amit+%26+Simon)](https://git.io/typing-svg)
 
 The Project is written in CPP <p align="left"> <a href="https://www.w3schools.com/cpp/" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/cplusplus/cplusplus-original.svg" alt="cplusplus" width="40" height="40"/> </a> </p>
 Advanced Programming  project by Amit Hazan and Simon Fraiberg
@@ -12,7 +12,7 @@ first run the server. the command is ./server.out  <port>.
 now run the client. the command is ./client.out <server ip> <port that server is listening to>.
 
 a menu like this will appear:
-[![Typing SVG](https://readme-typing-svg.demolab.com?font=ARIEL&weight=200&duration=300&pause=200&color=38F740&background=050D2F&multiline=true&width=1000&height=200&lines=Welcome+to+the+KNN+Classifier+Server.+Please+choose+an+option%3A;1.+upload+an+unclassified+csv+data+file;2.+algorithm+settings;3.+classify+data;4.+display+result;5.+download+results;8.+exit)](https://git.io/typing-svg)
+[![Typing SVG](https://readme-typing-svg.demolab.com?font=ARIEL&weight=200&duration=300&pause=200&color=38F740&background=050D2F&multiline=true&repeat=false&width=1000&height=200&lines=Welcome+to+the+KNN+Classifier+Server.+Please+choose+an+option%3A;1.+upload+an+unclassified+csv+data+file;2.+algorithm+settings;3.+classify+data;4.+display+result;5.+download+results;8.+exit)](https://git.io/typing-svg)
 
 here is a summary of each option:
 1. first upload a train csv file of classified vectors and then a test csv file of unclassified vectors.
