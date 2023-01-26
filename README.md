@@ -3,10 +3,10 @@
 The Project is written in CPP <p align="left"> <a href="https://www.w3schools.com/cpp/" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/cplusplus/cplusplus-original.svg" alt="cplusplus" width="40" height="40"/> </a> </p>
 Advanced Programming  project by Amit Hazan and Simon Fraiberg
 to compile follow this simple steps:
-1)download the project files by pressing in the main reposetory page on the arrow in the green button "code" then press download zip.
-2)extract the zip to a folder.
-3)open your terminal in the folder destination using dc command.
-4)run the "make" command on the planet server to compile.
+1.download the project files by pressing in the main reposetory page on the arrow in the green button "code" then press download zip.
+2.extract the zip to a folder.
+3.open your terminal in the folder destination using dc command.
+4.run the "make" command on the planet server to compile.
 now you have the server.out file and client.out file.
 first run the server. the command is ./server.out  <port>.
 now run the client. the command is ./client.out <server ip> <port that server is listening to>.
@@ -25,11 +25,11 @@ here is a summary of each option:
 2. this will show you the current settings for KNN algorithem that (distance method and k). pressing enter will keep them. if you would like to change them use this format <K for KNN> <string of distance func as written below>
 ***********************************************************
 the string representation of the formulas are as follows:
-1)AUC - auclidian distance.
-2)MAN - manhattan distance.
-3)CHB - chebyshev distance.
-4)CAN - canberra distance.
-5)MIN - minkowski distance.
+1.AUC - auclidian distance.
+2.MAN - manhattan distance.
+3.CHB - chebyshev distance.
+4.CAN - canberra distance.
+5.MIN - minkowski distance.
 ***********************************************************
 3. classify the test csv using the KNN algorithm with the train file.
 4. show the classification of the test file to the screen.
