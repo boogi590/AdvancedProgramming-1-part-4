@@ -13,26 +13,18 @@ void SettingsCommand::execute()
     string error;
 
     this->description = "The current KNN parameters are: K = " + to_string(this->k) + ", DISTANCE METRIC = " + this->distanceMatric + "\n";
-    send(socket.getSock(), description.c_str(), description.size(), 0);
+    socket.write(description);
 
     char buffer[4096];
     memset(buffer, 0, sizeof(buffer));
 
-    // Receive the file size
-    int bytes = recv(socket.getSock(), buffer, sizeof(buffer), 0);
-    string answer = string(buffer, 5);
-    if (answer == "EMPTY")
+    string input = socket.read();
+
+    if (input == "EMPTY")
     {
         memset(buffer, 0, sizeof(buffer));
         return;
     }
-
-    if (bytes <= 0)
-    {
-        close(socket.getSock());
-    }
-
-    string input = string(buffer, bytes);
 
     bool invaild = false;
     double tempK;
@@ -75,10 +67,10 @@ void SettingsCommand::execute()
         this->distanceMatric = distanceFunc;
         this->k = tempK;
         string changed = "changed";
-        send(socket.getSock(), changed.c_str(), changed.length(), 0);
+        socket.write(changed);
     }
     else
     {
-        send(socket.getSock(), error.c_str(), error.length(), 0);
+        socket.write(error);
     }
 }
