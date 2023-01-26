@@ -12,13 +12,7 @@ first run the server. the command is ./server.out  <port>.
 now run the client. the command is ./client.out <server ip> <port that server is listening to>.
 
 a menu like this will appear:
-Welcome to the KNN Classifier Server. Please choose an option:
-1. upload an unclassified csv data file
-2. algorithm settings
-3. classify data
-4. display result
-5. download results
-8. exit
+[![Typing SVG](https://readme-typing-svg.demolab.com?font=ARIEL&weight=200&duration=300&pause=200&color=38F740&background=050D2F&multiline=true&width=1000&height=200&lines=Welcome+to+the+KNN+Classifier+Server.+Please+choose+an+option%3A;1.+upload+an+unclassified+csv+data+file;2.+algorithm+settings;3.+classify+data;4.+display+result;5.+download+results;8.+exit)](https://git.io/typing-svg)
 
 here is a summary of each option:
 1. first upload a train csv file of classified vectors and then a test csv file of unclassified vectors.
