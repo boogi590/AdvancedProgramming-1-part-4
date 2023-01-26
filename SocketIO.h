@@ -11,9 +11,16 @@ class SocketIO : public DefaultIO
 private:
     int socketNum;
 
+private:
+    int socketNum;
+
 public:
     // constructor.
+    // constructor.
     SocketIO(int sokcet);
+
+    // getter.
+    int getSock();
 
     // getter.
     int getSock();

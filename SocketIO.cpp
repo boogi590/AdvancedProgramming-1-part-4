@@ -3,6 +3,10 @@
  *constructor.
  *socket = the number of the socket.
  */
+/**
+ *constructor.
+ *socket = the number of the socket.
+ */
 SocketIO::SocketIO(int socket)
 {
     this->socketNum = socket;
