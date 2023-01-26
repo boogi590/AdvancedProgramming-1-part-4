@@ -46,3 +46,4 @@ its a static method so it would not be necessary to make an Distance object to u
 
 ##the minikowski function was calculated as p = 2 in the formula##
 ](https://github.com/boogi590/AdvancedProgramming-1-part-4)
+](https://github.com/boogi590/AdvancedProgramming-1-part-4)
