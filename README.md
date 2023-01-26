@@ -45,5 +45,4 @@ all of the 5 different distance function are in Distance class that has static f
 its a static method so it would not be necessary to make an Distance object to use them. just like the known math class.
 
 ##the minikowski function was calculated as p = 2 in the formula##
-](https://github.com/boogi590/AdvancedProgramming-1-part-4)
-](https://github.com/boogi590/AdvancedProgramming-1-part-4)
+
