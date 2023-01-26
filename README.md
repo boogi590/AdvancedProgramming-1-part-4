@@ -1,4 +1,4 @@
-[![Typing SVG](https://readme-typing-svg.demolab.com?font=ARIEL&weight=500&size=30&duration=3000&pause=200&color=F7AE6C&background=FF51F800&multiline=true&width=600&height=100&lines=Advance++Programming+Project;+By+Amit+%26+Simon)](https://git.io/typing-svg)
+[![Typing SVG](https://readme-typing-svg.demolab.com?font=ARIEL&weight=500&size=30&duration=3000&pause=200&color=F7AE6C&background=FF51F800&multiline=true&width=600&height=100&lines=Advance++Programming+Project;+By+Amit+%26+Simon 👋👋)](https://git.io/typing-svg)
 
 The Project is written in CPP <p align="left"> <a href="https://www.w3schools.com/cpp/" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/cplusplus/cplusplus-original.svg" alt="cplusplus" width="40" height="40"/> </a> </p>
 Advanced Programming  project by Amit Hazan and Simon Fraiberg
