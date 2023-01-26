@@ -1,4 +1,5 @@
 #include "UploadCommand.h"
+#define BUFFER_SIZE 4096
 
 UploadCommand::UploadCommand(SocketIO socket, multimap<vector<double>, string> &database,
                              vector<vector<double>> &test, FlowControl &flowC) : socket(socket),
@@ -17,10 +18,10 @@ void UploadCommand::execute()
 
     int fileSizeTrain = 0;
     string fileTrain;
-    char buffer[4096];
 
     // read the file size the client sent
     string fileSize = socket.read();
+
     try
     {
         fileSizeTrain = stoi(fileSize);
@@ -33,22 +34,23 @@ void UploadCommand::execute()
     {
         return;
     }
-    int bytes_received_total = 0;
     // Receive the file
-    for (int i = 0; i < ((fileSizeTrain - 1) / sizeof(buffer)) + 1; i++)
+    for (int i = 0; i < ((fileSizeTrain - 1) / BUFFER_SIZE) + 1; i++)
     {
-        fileTrain += socket.read();
+        string read = socket.read();
+        fileTrain += read;
     }
 
     string upload = "Upload complete.\nPlease upload your local test CSV file.";
-    send(socket.getSock(), upload.c_str(), upload.length(), 0);
+    // send to cleint that upload completed and that he should upload the test file now
+    socket.write(upload);
 
     int fileSizeTest = 0;
-    bytes_received_total = 0;
-    memset(buffer, 0, sizeof(buffer));
+
     // Receive the file size
     // read the file size the client sent
     string fileTest = socket.read();
+
     try
     {
         fileSizeTest = stoi(fileTest);
@@ -63,9 +65,11 @@ void UploadCommand::execute()
     }
 
     // Receive the file
-    for (int i = 0; i < ((fileSizeTest - 1) / sizeof(buffer)) + 1; i++)
+    for (int i = 0; i < ((fileSizeTest - 1) / BUFFER_SIZE) + 1; i++)
     {
-        fileTest += socket.read();
+        string read = socket.read();
+
+        fileTest += read;
     }
 
     // create the data base
@@ -73,10 +77,11 @@ void UploadCommand::execute()
     // create vector of double vectors of the test file
     this->test = DataBase::createTestVectors(fileTest);
 
-    // set the flow control that files uploaded.
+    // set the flow control that files uploaded and need to be classified.
     this->flowC.setDidFilesUploaded(true);
     this->flowC.setDidDataClassified(false);
 
     string uploadTest = "Upload complete.\n";
-    send(socket.getSock(), uploadTest.c_str(), uploadTest.length(), 0);
+    // send to client that uloade completed
+    socket.write(uploadTest);
 }

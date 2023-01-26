@@ -11,14 +11,18 @@ SettingsCommand::SettingsCommand(SocketIO socket, multimap<vector<double>, strin
 void SettingsCommand::execute()
 {
     string error;
-
     this->description = "The current KNN parameters are: K = " + to_string(this->k) + ", DISTANCE METRIC = " + this->distanceMatric + "\n";
     socket.write(description);
 
     char buffer[4096];
     memset(buffer, 0, sizeof(buffer));
+    string input;
+    input = socket.read();
 
-    string input = socket.read();
+    if (input.length() == 0)
+    {
+        return;
+    }
 
     if (input == "EMPTY")
     {

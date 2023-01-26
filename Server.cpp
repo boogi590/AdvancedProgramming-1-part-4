@@ -42,15 +42,13 @@ void *handle_client(void *arg)
         int expected_data_len = sizeof(buffer);
         read_bytes = recv(client_sock, buffer, sizeof(buffer), 0);
 
-        if (read_bytes == 0)
+        if (read_bytes <= 0)
         {
-            break;
+            close(client_sock);
+            pthread_exit(NULL);
+            continue;
         }
-        else if (read_bytes < 0)
-        {
-            invalidFlag = true;
-            classification = "invalid input";
-        }
+
         else
         {
             if (strlen(buffer) == 1 && buffer[0] == '1')

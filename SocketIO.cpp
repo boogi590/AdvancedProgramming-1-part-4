@@ -27,6 +27,9 @@ string SocketIO::read()
     if (bytesRead <= 0)
     {
         close(socketNum);
+        pthread_exit(NULL);
+        string error = "-1";
+        return error;
     }
     string recived = string(buffer, bytesRead);
 
