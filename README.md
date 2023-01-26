@@ -19,11 +19,11 @@ here is a summary of each option:
 2. this will show you the current settings for KNN algorithem that (distance method and k). pressing enter will keep them. if you would like to change them use this format <K for KNN> <string of distance func as written below>
 ***********************************************************
 the string representation of the formulas are as follows:
-1.AUC - auclidian distance.
-2.MAN - manhattan distance.
-3.CHB - chebyshev distance.
-4.CAN - canberra distance.
-5.MIN - minkowski distance.
+1. AUC - auclidian distance.
+2. MAN - manhattan distance.
+3. CHB - chebyshev distance.
+4. CAN - canberra distance.
+5. MIN - minkowski distance.
 ***********************************************************
 3. classify the test csv using the KNN algorithm with the train file.
 4. show the classification of the test file to the screen.
