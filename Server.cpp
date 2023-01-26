@@ -30,10 +30,6 @@ void *handle_client(void *arg)
     FlowControl flowControl;
     while (true)
     {
-        DataBase::printDataBase(dataBase);
-        DataBase::printTrainFile(test);
-        cout << "dataBase size" << dataBase.size() << endl;
-        cout << "test size" << test.size() << endl;
 
         char buffer[4096];
         memset(buffer, 0, sizeof(buffer));
