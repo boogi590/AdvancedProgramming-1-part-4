@@ -1,7 +1,9 @@
 <a href="https://git.io/typing-svg"><img src="https://readme-typing-svg.demolab.com?font=ARIEL&weight=500&size=30&duration=3000&pause=1000&color=F7AE6C&background=FF51F800&multiline=true&width=435&lines=Advance++Programming;By+Amit+%26+Simon" alt="Typing SVG" /></a>
 
-# AdvancedProgramming-1
-Advanced Programming 1 project by Amit Hazan and Simon Fraiberg
+
+
+
+Advanced Programming  project by Amit Hazan and Simon Fraiberg
 to compile follow this simple steps:
 1)download the project files by pressing in the main reposetory page on the arrow in the green button "code" then press download zip.
 2)extract the zip to a folder.
