@@ -5,6 +5,8 @@
 #include <string.h>
 #include <fstream>
 #include <limits>
+#include <netinet/in.h>
+#include <arpa/intet.h>
 #include "InputValidation.h"
 #include "ReadWriteFiles.h"
 using namespace std;
@@ -122,11 +124,12 @@ int main(int argc, char *argv[])
             cout << buffer << endl;
             string fileName;
             cin >> fileName;
+
             ifstream file(fileName, ios::binary);
             if (!file)
             {
                 int size = 0;
-                cout << "invalid userChoise" << endl;
+                cout << "invalid input" << endl;
                 send(sock, (char *)&size, sizeof(size), 0);
 
                 continue;
@@ -144,6 +147,7 @@ int main(int argc, char *argv[])
             while (file)
             {
                 memset(buffer, 0, sizeof(buffer));
+
                 file.read(buffer, sizeof(buffer));
                 int bytes_read = file.gcount();
                 send(sock, buffer, bytes_read, 0);
@@ -160,7 +164,7 @@ int main(int argc, char *argv[])
             if (!fileTrain)
             {
                 int size = 0;
-                cout << "invalid userChoise" << endl;
+                cout << "invalid input" << endl;
                 send(sock, (char *)&size, sizeof(size), 0);
 
                 continue;
@@ -180,8 +184,11 @@ int main(int argc, char *argv[])
             while (fileTrain)
             {
                 memset(buffer, 0, sizeof(buffer));
+
                 fileTrain.read(buffer, sizeof(buffer));
                 int bytes_read = fileTrain.gcount();
+                cout << bytes_read;
+
                 send(sock, buffer, bytes_read, 0);
             }
             fileTrain.close();
@@ -195,18 +202,20 @@ int main(int argc, char *argv[])
         if (data_len == 1 && userChoise == "2")
         {
             char buffer[4096];
+
             memset(buffer, 0, sizeof(buffer));
+
             // get bytes in the size of the description
             recv(sock, buffer, 65, 0);
             cout << buffer;
             memset(buffer, 0, sizeof(buffer));
+
             string newParms;
             getline(cin, newParms);
 
             if (newParms.length() == 0)
             {
                 send(sock, "EMPTY", 5, 0);
-                send(sock, "EMPTY", 6, 0);
                 continue;
             }
             else
