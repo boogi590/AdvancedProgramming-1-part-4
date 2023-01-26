@@ -4,22 +4,29 @@
 #include <iostream>
 #include <sys/socket.h>
 #include <unistd.h>
+#include "string.h"
 
 class SocketIO : public DefaultIO
 {
 private:
     int socketNum;
 
+private:
+    int socketNum;
+
 public:
+    // constructor.
     // constructor.
     SocketIO(int sokcet);
 
     // getter.
     int getSock();
 
+    // getter.
+    int getSock();
+
     // The implementation of the abstract class.
     string read();
-    string read(char* writeTo);
     void write(string) override;
 };
 #endif

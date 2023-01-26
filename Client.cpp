@@ -141,8 +141,7 @@ int main(int argc, char *argv[])
             file.seekg(0, file.beg);
 
             // Send the file size
-            send(sock, (char *)&fileSize, sizeof(fileSize), 0);
-
+            send(sock, (to_string(fileSize)).c_str(), to_string(fileSize).length(), 0);
             // Send the file
             char buffer[4096];
             while (file)
@@ -177,7 +176,7 @@ int main(int argc, char *argv[])
             fileTrain.seekg(0, fileTrain.beg);
 
             // Send the file size
-            send(sock, (char *)&fileSizeTrain, sizeof(fileSizeTrain), 0);
+            send(sock, (to_string(fileSizeTrain)).c_str(), to_string(fileSizeTrain).length(), 0);
 
             // Send the file
             memset(buffer, 0, sizeof(buffer));
@@ -216,8 +215,7 @@ int main(int argc, char *argv[])
 
             if (newParms.length() == 0)
             {
-
-                send(sock, "EMPTY", 6, 0);
+                send(sock, "EMPTY", 5, 0);
                 continue;
             }
             else

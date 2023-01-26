@@ -7,7 +7,6 @@
 #include <string.h>
 #include <sstream>
 #include <vector>
-#include "Command.h"
 #include "Distance.h"
 #include "InputValidation.h"
 #include "DataBase.h"
@@ -15,8 +14,6 @@
 #include "UploadCommand.h"
 #include "SettingsCommand.h"
 #include "FlowControl.h"
-#include "ClassifyData.h"
-#include "DisplayResults.h"
 
 using namespace std;
 
@@ -26,45 +23,49 @@ void *handle_client(void *arg)
 
     int client_sock = *(int *)arg;
     SocketIO socket(client_sock);
-    //************** client data ***********************************************************************************
     multimap<vector<double>, string> dataBase;
     vector<vector<double>> test;
     string distanceMatric = "AUC";
     int k = 5;
     FlowControl flowControl;
-    map<int, string> classify_data;
-    Command *commandArray[5];
-    commandArray[0] = new UploadCommand(socket, dataBase, test);
-    commandArray[1] = new SettingsCommand(socket, dataBase, k, distanceMatric);
-    commandArray[2] = new ClassifyData(dataBase, test, k, distanceMatric, flowControl, classify_data);
-    commandArray[3] = new DisplayResults(classify_data, flowControl);
-    //************** end of client data *****************************************************************************
     while (true)
     {
-        // DataBase::printDataBase(dataBase);
-        // DataBase::printTrainFile(test);
+
         char buffer[4096];
         memset(buffer, 0, sizeof(buffer));
         int read_bytes = send(client_sock, menu.c_str(), menu.length(), 0);
+
+        bool invalidFlag = false;
+        string classification = "invalid input";
         memset(buffer, 0, sizeof(buffer));
-        // int expected_data_len = sizeof(buffer);
+
+        int expected_data_len = sizeof(buffer);
         read_bytes = recv(client_sock, buffer, sizeof(buffer), 0);
 
         if (read_bytes <= 0)
         {
-            break;
+            close(client_sock);
+            pthread_exit(NULL);
+            continue;
         }
+
         else
         {
-            // convert from char to int.
-            int userChiose = buffer[0] - '0';
-            if (InputValidation::menuCheck(userChiose))
+            if (strlen(buffer) == 1 && buffer[0] == '1')
             {
-                cout << "database size =" << dataBase.size() << endl;
-                cout << "test size=" << test.size() << endl;
                 memset(buffer, 0, sizeof(buffer));
-                commandArray[userChiose - 1]->execute();
+                UploadCommand command(socket, dataBase, test, flowControl);
+                command.execute();
             }
+
+            if (strlen(buffer) == 1 && buffer[0] == '2')
+            {
+                memset(buffer, 0, sizeof(buffer));
+                SettingsCommand settingCommand(socket, dataBase, k, distanceMatric);
+                settingCommand.execute();
+            }
+
+            // handle other menu options
         }
     }
     close(client_sock);

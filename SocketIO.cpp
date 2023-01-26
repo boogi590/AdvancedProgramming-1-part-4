@@ -3,6 +3,10 @@
  *constructor.
  *socket = the number of the socket.
  */
+/**
+ *constructor.
+ *socket = the number of the socket.
+ */
 SocketIO::SocketIO(int socket)
 {
     this->socketNum = socket;
@@ -19,18 +23,21 @@ int SocketIO::getSock()
  * the function read from the socket.
  * @return string = the string of data from the socket.
  */
-string SocketIO::read(char* writeTo)
+string SocketIO::read()
 {
-    int bytes = recv(socketNum, writeTo, sizeof(writeTo), 0);
-    if (writeTo <= 0)
-    {
-        return;
-    }
-
-    if (bytes <= 0)
+    char buffer[4096];
+    memset(buffer, 0, sizeof(buffer));
+    int bytesRead = recv(socketNum, buffer, sizeof(buffer), 0);
+    if (bytesRead <= 0)
     {
         close(socketNum);
+        pthread_exit(NULL);
+        string error = "-1";
+        return error;
     }
+    string recived = string(buffer, bytesRead);
+
+    return recived;
 }
 /**
  *
