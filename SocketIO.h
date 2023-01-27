@@ -22,5 +22,6 @@ public:
     string read();
     void write(string) override;
     void sendSize(int) override;
+    int reciveSize();
 };
 #endif

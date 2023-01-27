@@ -19,17 +19,7 @@ void UploadCommand::execute()
     int fileSizeTrain = 0;
     string fileTrain;
 
-    // read the file size the client sent
-    string fileSize = socket.read();
-
-    try
-    {
-        fileSizeTrain = stoi(fileSize);
-    }
-    catch (...)
-    {
-        return;
-    }
+    fileSizeTrain = socket.reciveSize();
     if (fileSizeTrain <= 0)
     {
         return;
@@ -45,27 +35,17 @@ void UploadCommand::execute()
     // send to cleint that upload completed and that he should upload the test file now
     socket.write(upload);
 
-    int fileSizeTest = 0;
+    int fileSizeTrain = 0;
+    string fileTest;
 
-    // Receive the file size
-    // read the file size the client sent
-    string fileTest = socket.read();
-
-    try
-    {
-        fileSizeTest = stoi(fileTest);
-    }
-    catch (...)
-    {
-        return;
-    }
-    if (fileSizeTest <= 0)
+    fileSizeTrain = socket.reciveSize();
+    if (fileSizeTrain <= 0)
     {
         return;
     }
 
     // Receive the file
-    for (int i = 0; i < ((fileSizeTest - 1) / BUFFER_SIZE) + 1; i++)
+    for (int i = 0; i < ((fileSizeTrain - 1) / BUFFER_SIZE) + 1; i++)
     {
         string read = socket.read();
 

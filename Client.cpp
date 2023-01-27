@@ -127,7 +127,7 @@ int main(int argc, char *argv[])
             file.seekg(0, file.beg);
 
             // Send the file size
-            send(sock, (to_string(fileSize)).c_str(), to_string(fileSize).length(), 0);
+            send(sock, &fileSize, sizeof(fileSize), 0);
             // Send the file
             char buffer[4096];
             while (file)
@@ -162,7 +162,7 @@ int main(int argc, char *argv[])
             fileTrain.seekg(0, fileTrain.beg);
 
             // Send the file size
-            send(sock, (to_string(fileSizeTrain)).c_str(), to_string(fileSizeTrain).length(), 0);
+            send(sock, &fileSizeTrain, sizeof(fileSizeTrain), 0);
 
             // Send the file
             memset(buffer, 0, sizeof(buffer));

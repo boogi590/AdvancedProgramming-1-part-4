@@ -51,3 +51,11 @@ void SocketIO::sendSize(int num)
 {
     send(socketNum, &num, sizeof(num), 0);
 }
+
+int SocketIO::reciveSize()
+{
+    int fileSize = 0;
+    // recive the file size
+    recv(socketNum, &fileSize, sizeof(fileSize), 0);
+    return fileSize;
+}
