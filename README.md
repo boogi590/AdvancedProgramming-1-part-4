@@ -34,6 +34,7 @@ the string representation of the formulas are as follows:
 *the K is for the KNN fucntion that indicates the number of neighbors in the function.
 
 wrong input will print invalid input. (wrong input like none positive K, wrong length of vector, wrong string representation of the distance formula).
+note that if you provide us a k of a large number that is leagal for the current file but then upload a file smaller then the k, the k will be the size of the smaller file.
 please make sure that that after you upload new files to classify them again for the desired result.
 you can input a file with as much vectors as you would like.
 the server will keep running making a thread for each new clinet.
