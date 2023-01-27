@@ -35,17 +35,17 @@ void UploadCommand::execute()
     // send to cleint that upload completed and that he should upload the test file now
     socket.write(upload);
 
-    int fileSizeTrain = 0;
+    int fileSizeTest = 0;
     string fileTest;
 
-    fileSizeTrain = socket.reciveSize();
-    if (fileSizeTrain <= 0)
+    fileSizeTest = socket.reciveSize();
+    if (fileSizeTest <= 0)
     {
         return;
     }
 
     // Receive the file
-    for (int i = 0; i < ((fileSizeTrain - 1) / BUFFER_SIZE) + 1; i++)
+    for (int i = 0; i < ((fileSizeTest - 1) / BUFFER_SIZE) + 1; i++)
     {
         string read = socket.read();
 
