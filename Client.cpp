@@ -109,8 +109,7 @@ int main(int argc, char *argv[])
             recv(sock, buffer, sizeof(buffer), 0);
             cout << buffer << endl;
             string fileName;
-            cin >> fileName;
-
+            getline(cin, fileName);
             ifstream file(fileName, ios::binary);
             if (!file)
             {
@@ -144,7 +143,7 @@ int main(int argc, char *argv[])
             cout << buffer << endl;
 
             string fileNameTrain;
-            cin >> fileNameTrain;
+            getline(cin, fileNameTrain);
 
             ifstream fileTrain(fileNameTrain, ios::binary);
             if (!fileTrain)
