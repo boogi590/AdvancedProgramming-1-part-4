@@ -76,8 +76,16 @@ int main(int argc, char *argv[])
         {
             getline(cin, userChoise);
         }
-
-        while (!InputValidation::menuCheck(stoi(userChoise)))
+        int choise =0;
+        try {
+           choise = stoi(userChoise);
+        }
+        catch(...) {
+            cout << "invalid input" << endl;
+            cout << menu << endl;
+            getline(cin, userChoise);
+        }
+        while (!InputValidation::menuCheck(choise))
         {
             cout << "invalid input" << endl;
             cout << menu << endl;
