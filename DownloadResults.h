@@ -3,6 +3,8 @@
 #include <algorithm>
 #include <iostream>
 #include <map>
+#include "pthread.h"
+
 using namespace std;
 
 class DownloadResults : public Command
@@ -16,4 +18,3 @@ public:
     ~DownloadResults();
     void execute();
 };
-
