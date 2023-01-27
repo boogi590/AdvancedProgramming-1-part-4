@@ -18,6 +18,7 @@
 #include "ClassifyData.h"
 #include "DisplayResults.h"
 #include "DownloadResults.h"
+#include "CLI.h"
 
 using namespace std;
 
@@ -36,14 +37,21 @@ void *handle_client(void *arg)
     map<int, string> classify_data;
     Command *commandArray[5];
     SocketIO socketIO(socket);
-    commandArray[0] = new UploadCommand(socket, dataBase, test, flowControl);
-    commandArray[1] = new SettingsCommand(socket, dataBase, k, distanceMatric);
-    commandArray[2] = new ClassifyData(dataBase, test, k, distanceMatric, flowControl, classify_data);
-    commandArray[2]->setIO(&socketIO);
-    commandArray[3] = new DisplayResults(classify_data, flowControl);
-    commandArray[3]->setIO(&socketIO);
-    commandArray[4] = new DownloadResults(classify_data, flowControl);
-    commandArray[4]->setIO(&socketIO);
+    UploadCommand command1(socket, dataBase, test, flowControl);
+    SettingsCommand command2(socket, dataBase, k, distanceMatric);
+    ClassifyData command3(dataBase, test, k, distanceMatric, flowControl, classify_data);
+    command3.setIO(&socketIO);
+    DisplayResults command4(classify_data, flowControl);
+    command4.setIO(&socketIO);
+    DownloadResults command5(classify_data, flowControl);
+    command5.setIO(&socketIO);
+
+    commandArray[0] = &command1;
+    commandArray[1] = &command2;
+    commandArray[2] = &command3;
+    commandArray[3] = &command4;
+    commandArray[4] = &command5;
+    CLI cli(commandArray);
     //************** end of client data *****************************************************************************
     while (true)
     {
@@ -64,16 +72,14 @@ void *handle_client(void *arg)
         {
             // convert from char to int.
             int userChiose = buffer[0] - '0';
-            if (InputValidation::menuCheck(userChiose))
-            {
-                if (userChiose == 8)
-                {
-                    break;
-                }
 
-                memset(buffer, 0, sizeof(buffer));
-                commandArray[userChiose - 1]->execute();
+            if (userChiose == 8)
+            {
+                break;
             }
+
+            memset(buffer, 0, sizeof(buffer));
+            cli.start(userChiose);
         }
     }
     close(client_sock);
