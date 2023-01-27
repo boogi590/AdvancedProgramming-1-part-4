@@ -8,3 +8,7 @@ string DefaultIO::read()
 void DefaultIO::write(string input)
 {
 }
+
+void DefaultIO::sendSize(int num)
+{
+}

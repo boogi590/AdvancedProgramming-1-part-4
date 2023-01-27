@@ -9,5 +9,6 @@ class DefaultIO
 public:
     virtual string read() = 0;
     virtual void write(string input) = 0;
+    virtual void sendSize(int num) = 0;
 };
 #endif

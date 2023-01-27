@@ -16,15 +16,18 @@ ClassifyData::ClassifyData(multimap<vector<double>, string> &database,
 
 void ClassifyData::execute()
 {
-    /**
-    //if the user didnt upload files then return and print error.
     if (!flow_control.did_files_uploaded)
     {
-        cout << "please upload data" << endl;
-        IO->write("please upload data");
+        IO->write("1");
         return;
     }
-    */
+    else
+    {
+        IO->write("2");
+    }
+
+    classify_data.clear();
+
     int line = 1;
     KNN runningKnn(k, database, distance_metric);
     for (vector<vector<double>>::iterator vector = testCSV.begin(); vector != testCSV.end(); ++vector)
@@ -32,8 +35,6 @@ void ClassifyData::execute()
         classify_data.insert({line, runningKnn.mostCommonFromK(*vector)});
         line++;
     }
-    cout << "complete data classifying" << endl;
-    cout << "classifyData size=" << classify_data.size() << endl;
-    // IO->write("complete data classifying");
-    // flow_control.setDidDataClassified(true);
+    IO->write("complete data classifying");
+    flow_control.setDidDataClassified(true);
 }
