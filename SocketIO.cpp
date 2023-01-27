@@ -46,3 +46,8 @@ void SocketIO::write(string output)
 {
     send(socketNum, output.c_str(), output.length(), 0);
 }
+
+void SocketIO::sendSize(int num)
+{
+    send(socketNum, &num, sizeof(num), 0);
+}

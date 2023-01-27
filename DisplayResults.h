@@ -3,6 +3,9 @@
 #include <algorithm>
 #include <iostream>
 #include <map>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
 using namespace std;
 class DisplayResults : public Command
 {
@@ -14,5 +17,5 @@ private:
 
 public:
     void execute();
-    DisplayResults(map<int, string> &calssify_data,FlowControl &fc);
+    DisplayResults(map<int, string> &calssify_data, FlowControl &fc);
 };

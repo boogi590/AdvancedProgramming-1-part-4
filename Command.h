@@ -10,6 +10,7 @@ class Command
 {
 public:
     virtual void execute() = 0;
+    void setIO(DefaultIO *IO);
 
 protected:
     string description;

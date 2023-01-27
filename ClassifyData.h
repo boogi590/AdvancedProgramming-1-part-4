@@ -8,11 +8,11 @@ using namespace std;
 
 class ClassifyData : public Command
 {
-protected:
+private:
     multimap<vector<double>, string> &database;
     vector<vector<double>> &testCSV;
     int k;
-    string distance_metric;
+    string &distance_metric;
     FlowControl &flow_control;
     map<int, string> &classify_data;
 

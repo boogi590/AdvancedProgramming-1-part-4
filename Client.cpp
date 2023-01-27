@@ -1,30 +1,56 @@
 #include <iostream>
 #include <sys/socket.h>
 #include <stdio.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
 #include <unistd.h>
 #include <string.h>
 #include <fstream>
 #include <limits>
-#include <netinet/in.h>
-#include <arpa/intet.h>
 #include "InputValidation.h"
 #include "ReadWriteFiles.h"
 using namespace std;
 #define MENU_SIZE 187
 
-void *writeData(void *sock)
+void *downloadFile(void *arg)
 {
-    int socketID = *(int *)sock;
+    int socketID = *(int *)arg;
     char buffer[4096];
-    // recving and printing the command 5 description.
-    recv(socketID, buffer, sizeof(buffer), 0);
-    cout << buffer << endl;
-    string address;
-    cin >> address;
     memset(buffer, 0, sizeof(buffer));
-    // Receive the file
-    recv(socketID, buffer, sizeof(buffer), 0);
-    ReadWriteFiles ::writeToFile(buffer, address);
+
+    recv(socketID, buffer, 1, 0);
+    string result = string(buffer, 1);
+    memset(buffer, 0, sizeof(buffer));
+    if (result == "1")
+    {
+        cout << "please upload data" << endl;
+        pthread_exit(NULL);
+    }
+    if (result == "2")
+    {
+        cout << "please classify the data" << endl;
+        pthread_exit(NULL);
+    }
+
+    string fileTrain;
+    int fileSize = 0;
+    // recive the file size
+    recv(socketID, &fileSize, sizeof(fileSize), 0);
+
+    // recive all of the packets in the size of the buffer
+    for (int i = 0; i < ((fileSize - 1) / sizeof(buffer)); i++)
+    {
+        memset(buffer, 0, sizeof(buffer));
+        int bytes = recv(socketID, buffer, sizeof(buffer), 0);
+        fileTrain += string(buffer, bytes);
+    }
+    // recive the last packet that is smaller then the buffer size
+    int bytes = recv(socketID, buffer, fileSize % sizeof(buffer), 0);
+    fileTrain += string(buffer, bytes);
+    ofstream outfile("data.csv");
+    outfile << fileTrain;
+    outfile.close();
+    pthread_exit(NULL);
 }
 
 int main(int argc, char *argv[])
@@ -80,7 +106,9 @@ int main(int argc, char *argv[])
         char buffer[4096];
         memset(buffer, 0, sizeof(buffer));
         // receving the menu.
+
         recv(sock, buffer, MENU_SIZE, 0);
+
         cout << buffer << endl;
         // saving the menu.
         string menu = string(buffer, MENU_SIZE);
@@ -93,7 +121,7 @@ int main(int argc, char *argv[])
 
         while (!InputValidation::menuCheck(stoi(userChoise)))
         {
-            cout << "invalid userChoise" << endl;
+            cout << "invalid input" << endl;
             cout << menu << endl;
             getline(cin, userChoise);
         }
@@ -187,8 +215,6 @@ int main(int argc, char *argv[])
 
                 fileTrain.read(buffer, sizeof(buffer));
                 int bytes_read = fileTrain.gcount();
-                cout << bytes_read;
-
                 send(sock, buffer, bytes_read, 0);
             }
             fileTrain.close();
@@ -232,13 +258,67 @@ int main(int argc, char *argv[])
             }
             memset(buffer, 0, sizeof(buffer));
         }
+        if (data_len == 1 && userChoise == "3")
+        {
+            recv(sock, buffer, 1, 0);
+            string result = string(buffer, 1);
+            memset(buffer, 0, sizeof(buffer));
+            if (result == "1")
+            {
+                cout << "please upload data" << endl;
+                continue;
+            }
+
+            recv(sock, buffer, 25, 0);
+            cout << buffer << endl;
+            memset(buffer, 0, sizeof(buffer));
+        }
+
+        if (data_len == 1 && userChoise == "4")
+        {
+
+            recv(sock, buffer, 1, 0);
+            string result = string(buffer, 1);
+            memset(buffer, 0, sizeof(buffer));
+            if (result == "1")
+            {
+                cout << "please upload data" << endl;
+                continue;
+            }
+            if (result == "2")
+            {
+                cout << "please classify the data" << endl;
+                continue;
+            }
+
+            memset(buffer, 0, sizeof(buffer));
+
+            string fileTrain;
+            int fileSize = 0;
+            // recive the file size
+            recv(sock, &fileSize, sizeof(fileSize), 0);
+
+            // recive all of the packets in the size of the buffer
+            for (int i = 0; i < ((fileSize - 1) / sizeof(buffer)); i++)
+            {
+                memset(buffer, 0, sizeof(buffer));
+                int bytes = recv(sock, buffer, sizeof(buffer), 0);
+                fileTrain += string(buffer, bytes);
+            }
+
+            // recive the last packet that is smaller then the buffer size
+            int bytes = recv(sock, buffer, fileSize % sizeof(buffer), 0);
+            fileTrain += string(buffer, bytes);
+            cout << fileTrain;
+        }
 
         if (data_len == 1 && userChoise == "5")
         {
+
             // create a new thread to handle the client
             pthread_t thread;
-            int createSucessfully = pthread_create(&thread, NULL, writeData, (void *)sock);
-            if (createSucessfully)
+            int rc = pthread_create(&thread, NULL, downloadFile, (void *)&sock);
+            if (rc)
             {
                 perror("error creating thread");
                 close(sock);
