@@ -12,47 +12,6 @@
 using namespace std;
 #define MENU_SIZE 187
 
-void *downloadFile(void *arg)
-{
-    int socketID = *(int *)arg;
-    char buffer[4096];
-    memset(buffer, 0, sizeof(buffer));
-
-    recv(socketID, buffer, 1, 0);
-    string result = string(buffer, 1);
-    memset(buffer, 0, sizeof(buffer));
-    if (result == "1")
-    {
-        cout << "please upload data" << endl;
-        pthread_exit(NULL);
-    }
-    if (result == "2")
-    {
-        cout << "please classify the data" << endl;
-        pthread_exit(NULL);
-    }
-
-    string fileTrain;
-    int fileSize = 0;
-    // recive the file size
-    recv(socketID, &fileSize, sizeof(fileSize), 0);
-
-    // recive all of the packets in the size of the buffer
-    for (int i = 0; i < ((fileSize - 1) / sizeof(buffer)); i++)
-    {
-        memset(buffer, 0, sizeof(buffer));
-        int bytes = recv(socketID, buffer, sizeof(buffer), 0);
-        fileTrain += string(buffer, bytes);
-    }
-    // recive the last packet that is smaller then the buffer size
-    int bytes = recv(socketID, buffer, fileSize % sizeof(buffer), 0);
-    fileTrain += string(buffer, bytes);
-    ofstream outfile("data.csv");
-    outfile << fileTrain;
-    outfile.close();
-    pthread_exit(NULL);
-}
-
 int main(int argc, char *argv[])
 {
     /*********************************CHECK THE ARGS*******************************/
@@ -314,16 +273,42 @@ int main(int argc, char *argv[])
 
         if (data_len == 1 && userChoise == "5")
         {
-
-            // create a new thread to handle the client
-            pthread_t thread;
-            int rc = pthread_create(&thread, NULL, downloadFile, (void *)&sock);
-            if (rc)
+            recv(sock, buffer, 1, 0);
+            string result = string(buffer, 1);
+            memset(buffer, 0, sizeof(buffer));
+            if (result == "1")
             {
-                perror("error creating thread");
-                close(sock);
+                cout << "please upload data" << endl;
                 continue;
             }
+            if (result == "2")
+            {
+                cout << "please classify the data" << endl;
+                continue;
+            }
+            string filePath;
+            cin >> filePath;
+
+            char buffer[4096];
+            memset(buffer, 0, sizeof(buffer));
+            string fileTrain;
+            int fileSize = 0;
+            // recive the file size
+            recv(sock, &fileSize, sizeof(fileSize), 0);
+
+            // recive all of the packets in the size of the buffer
+            for (int i = 0; i < ((fileSize - 1) / sizeof(buffer)); i++)
+            {
+                memset(buffer, 0, sizeof(buffer));
+                int bytes = recv(sock, buffer, sizeof(buffer), 0);
+                fileTrain += string(buffer, bytes);
+            }
+            // recive the last packet that is smaller then the buffer size
+            int bytes = recv(sock, buffer, fileSize % sizeof(buffer), 0);
+            fileTrain += string(buffer, bytes);
+            ofstream outfile(filePath);
+            outfile << fileTrain;
+            outfile.close();
         }
         if (data_len == 1 && userChoise == "8")
         {

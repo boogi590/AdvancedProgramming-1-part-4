@@ -52,8 +52,6 @@ void *handle_client(void *arg)
         char buffer[4096];
         memset(buffer, 0, sizeof(buffer));
         int read_bytes = send(client_sock, menu.c_str(), menu.length(), 0);
-        cout << "sent" << endl;
-
         memset(buffer, 0, sizeof(buffer));
         // int expected_data_len = sizeof(buffer);
         read_bytes = recv(client_sock, buffer, sizeof(buffer), 0);
@@ -68,6 +66,10 @@ void *handle_client(void *arg)
             int userChiose = buffer[0] - '0';
             if (InputValidation::menuCheck(userChiose))
             {
+                if (userChiose == 8)
+                {
+                    break;
+                }
 
                 memset(buffer, 0, sizeof(buffer));
                 commandArray[userChiose - 1]->execute();
