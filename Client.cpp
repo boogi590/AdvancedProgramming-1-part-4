@@ -76,32 +76,30 @@ int main(int argc, char *argv[])
         {
             getline(cin, userChoise);
         }
-        int choise =0;
-        try {
-           choise = stoi(userChoise);
-        }
-        catch(...) {
-            cout << "invalid input" << endl;
-            cout << menu << endl;
-            getline(cin, userChoise);
-        }
-        while (!InputValidation::menuCheck(choise))
+        int choise = 0;
+        do
         {
-            cout << "invalid input" << endl;
-            cout << menu << endl;
-            getline(cin, userChoise);
-        }
-        try
-        {
-            stop = stod(userChoise);
-            if (stop == -1)
+            try
+            {
+                choise = stoi(userChoise);
+            }
+            catch (...)
+            {
+                cout << "invalid input" << endl;
+                cout << menu << endl;
+                getline(cin, userChoise);
+            }
+            if (!InputValidation::menuCheck(choise))
+            {
+                cout << "invalid input" << endl;
+                cout << menu << endl;
+                getline(cin, userChoise);
+            }
+            else
             {
                 break;
             }
-        }
-        catch (...)
-        {
-        }
+        } while (!InputValidation::menuCheck(choise));
 
         // sending the userChoise from the menu to the server.
         data_len = userChoise.length();
