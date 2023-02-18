@@ -8,8 +8,8 @@ to compile follow this simple steps:
 3. open your terminal in the folder destination using dc command.
 4. run the "make" command on the planet server to compile.
 now you have the server.out file and client.out file.
-first run the server. the command is ./server.out  <port>.
-now run the client. the command is ./client.out <server ip> <port that server is listening to>.
+first run the server. the command is ./server.out [port].
+now run the client. the command is ./client.out  [server ip] [port that server is listening to].
 
 a menu like this will appear:
 [![Typing SVG](https://readme-typing-svg.demolab.com?font=ARIEL&weight=200&duration=500&pause=200&color=38F740&background=050D2F&multiline=true&&repeat=false&&width=1000&height=200&lines=Welcome+to+the+KNN+Classifier+Server.+Please+choose+an+option%3A;1.+upload+an+unclassified+csv+data+file;2.+algorithm+settings;3.+classify+data;4.+display+result;5.+download+results;8.+exit)](https://git.io/typing-svg)
